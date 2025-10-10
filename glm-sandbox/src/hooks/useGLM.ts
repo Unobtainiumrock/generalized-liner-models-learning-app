@@ -16,8 +16,9 @@ export const useGLM = () => {
   } = useAppStore();
 
   // Track previous parameters to detect changes
-  const prevParamsRef = useRef<GLMParameters>(truthParams);
+  const prevTruthParamsRef = useRef<GLMParameters>(truthParams);
   const prevConfigRef = useRef<GLMConfig>(truthConfig);
+  const prevEstimatedParamsRef = useRef<GLMParameters>(estimatedParams);
 
   const generateData = useCallback(async () => {
     setIsGeneratingData(true);
@@ -30,28 +31,38 @@ export const useGLM = () => {
     setIsGeneratingData(false);
     
     // Update refs after generating new data
-    prevParamsRef.current = { ...truthParams };
+    prevTruthParamsRef.current = { ...truthParams };
     prevConfigRef.current = { ...truthConfig };
+    prevEstimatedParamsRef.current = { ...estimatedParams };
   }, [truthParams, truthConfig, sampleSize, setDataPoints, setIsGeneratingData]);
 
-  // Transform existing data points when truth parameters change
-  // This ensures data points move with the truth line while maintaining their relative positions
+  // Transform existing data points when parameters change
+  // This ensures data points move with the appropriate line while maintaining their relative positions
   useEffect(() => {
     if (dataPoints.length > 0) {
-      const prevParams = prevParamsRef.current;
+      const prevTruthParams = prevTruthParamsRef.current;
+      const prevEstimatedParams = prevEstimatedParamsRef.current;
       const prevConfig = prevConfigRef.current;
       
-      // Check if parameters actually changed
-      const paramsChanged = 
-        prevParams.intercept !== truthParams.intercept || 
-        prevParams.slope !== truthParams.slope ||
+      // Check if truth parameters changed
+      const truthParamsChanged = 
+        prevTruthParams.intercept !== truthParams.intercept || 
+        prevTruthParams.slope !== truthParams.slope;
+      
+      // Check if estimated parameters changed
+      const estimatedParamsChanged = 
+        prevEstimatedParams.intercept !== estimatedParams.intercept || 
+        prevEstimatedParams.slope !== estimatedParams.slope;
+      
+      // Check if config changed
+      const configChanged = 
         prevConfig.distribution !== truthConfig.distribution ||
         prevConfig.linkFunction !== truthConfig.linkFunction;
       
-      if (paramsChanged) {
+      if (truthParamsChanged || estimatedParamsChanged || configChanged) {
         // Transform existing data points to follow the new truth line
         const transformedData = dataPoints.map(point => {
-          const oldMean = glmCalculations.meanResponse(point.x, prevParams, prevConfig);
+          const oldMean = glmCalculations.meanResponse(point.x, prevTruthParams, prevConfig);
           const newMean = glmCalculations.meanResponse(point.x, truthParams, truthConfig);
           
           // Calculate the offset from the old mean and apply it to the new mean
@@ -64,11 +75,12 @@ export const useGLM = () => {
         setDataPoints(transformedData);
         
         // Update refs
-        prevParamsRef.current = { ...truthParams };
+        prevTruthParamsRef.current = { ...truthParams };
+        prevEstimatedParamsRef.current = { ...estimatedParams };
         prevConfigRef.current = { ...truthConfig };
       }
     }
-  }, [truthParams, truthConfig, dataPoints, setDataPoints]);
+  }, [truthParams, estimatedParams, truthConfig, dataPoints, setDataPoints]);
 
   const autoFit = useCallback(() => {
     if (dataPoints.length === 0) return;
@@ -77,13 +89,13 @@ export const useGLM = () => {
     setEstimatedParams(estimated);
   }, [dataPoints, truthConfig, setEstimatedParams]);
 
-  const calculateLinearPredictor = useCallback((x: number, params = truthParams) => {
+  const calculateLinearPredictor = useCallback((x: number, params: GLMParameters) => {
     return glmCalculations.linearPredictor(x, params);
-  }, [truthParams]);
+  }, []);
 
-  const calculateMeanResponse = useCallback((x: number, params = truthParams) => {
+  const calculateMeanResponse = useCallback((x: number, params: GLMParameters) => {
     return glmCalculations.meanResponse(x, params, truthConfig);
-  }, [truthParams, truthConfig]);
+  }, [truthConfig]);
 
   return {
     generateData,
