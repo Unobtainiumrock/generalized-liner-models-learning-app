@@ -423,7 +423,39 @@ Where $\mathbf{y} = [y_1, y_2, \ldots, y_n]^T$ is the vector of observed respons
 **note:** For **non-canonical links** or **non-normal distributions**, we use iterative methods like **Iterative Reweighted Least Squares (IRLS)**, which also rely on matrix operations. This is out of scope for this blog, but is something we may create a follow-up post on.
 
 
+### From a Practical Standpoint
+
+Additionally, from a practical standpoint, the transition to matrix formulation doesn't actually change the fundamental GLM structure:
+
+| **GLM Component** | **Scalar Notation** | **Matrix Notation** |
+|-------------------|---------------------|---------------------|
+| Linear Predictor | $\eta = \mathbf{x}^T\boldsymbol{\beta}$ | $\boldsymbol{\eta} = \mathbf{X}\boldsymbol{\beta}$ |
+| Natural Parameter | $\theta = \eta$ | $\boldsymbol{\theta} = \boldsymbol{\eta}$ |
+| Link Function | $g(\mu) = \eta$ | $g(\boldsymbol{\mu}) = \boldsymbol{\eta}$ (element-wise) |
+| Inverse Link | $\mu = g^{-1}(\eta)$ | $\boldsymbol{\mu} = g^{-1}(\boldsymbol{\eta})$ (element-wise) |
+
+The **distribution** and **link function** choices from the GLM table above apply identically whether we're thinking about one observation (scalar) or many observations (matrix).
+
+
+### Computational Considerations
+
+And the advantages go beyond simply convenience factors. When we work in modern libraries like NumPy, TensorFlow, etc, we gain the gain the performance advantages of **vectorization**. We also gain the benefit of handling all observations simultaneously through **batch processing** and open the opportunity to apply well-established algorithms for matrix operations, such as QR decomp, SVD, etc.
+
+
+However, this isn't also without its own drawbacks. If the design matrix $X$ has a very large $n$ number of observations, it can be extensive to load the entire thing into memory. Additionally, if we happen to have a very large $p$, then operations like matrix inversion can be expensive, since inversion is an $O(p^{3}$ operation. We also run the risk of numerical stability, if $X^{T}X$ is ill-conditioned.
+
+Fortunately, there are also many method available to address each of these, but its still important to keep in mind where/how these drawbacks might emerge.
+
+They include the following:
+
+- **regularization**: Using techniques like Ridge and Lasso regression can help improve matrix conditioning.
+- **dimensionality reduction:** We can use techniques such as Principle Component Analysis (PCA) to reduce the dimensions when $p$ is large.
+- **applying iterative solvers:** Explicity matrix inversion can be avoided with these techniques.
+- **sparse matrix representations:** This one is out of scope, but also something that can be investigated in a future post.
+
 ### The Hidden Identity: Weight Matrices Across Distributions
+
+There's some other interesting things we should bring attention to. When we work with GLMs at the matrix-level, we can see how the link functions crop up in the diagonal weight matrix.
 
 There's actually an implicit identity matrix $\mathbf{I}_n$ between $\mathbf{X}^T$ and $\mathbf{X}$ for other distributions under the GLM framework we have. Let's make this explicit.
 
@@ -477,6 +509,7 @@ The table below shows how the weight matrix changes for different distributions 
    $$z_i^{(t)} = \eta_i^{(t)} + (y_i - \mu_i^{(t)}) \frac{d\eta}{d\mu}\bigg|_{\mu=\mu_i^{(t)}}$$
    where $\frac{d\eta}{d\mu}$ is the derivative of the link function.
 
+5. You can also see that the terms in the weight column of the table show the weight entries being a direct representation of their corrseponding link functions. 
 
 ### Why Weights Matter: A Conceptual View
 
@@ -530,36 +563,6 @@ $$\mathbf{X}^T\mathbf{W}^{(t)}\mathbf{X} = \begin{bmatrix}
 \end{bmatrix}$$
 
 The weighted inner product $\langle \mathbf{x}_j, \mathbf{x}_k \rangle_{\mathbf{W}^{(t)}} = \sum_{i=1}^n w_i^{(t)} x_{ij} x_{ik}$ replaces the standard inner product $\langle \mathbf{x}_j, \mathbf{x}_k \rangle = \sum_{i=1}^n x_{ij} x_{ik}$. This fundamentally changes which observations have more influence on the parameter estimates—observations with higher weights $w_i^{(t)}$ contribute more to each element of the Gram matrix.
-
-### From a Practical Standpoint
-
-Additionally, from a practical standpoint, the transition to matrix formulation doesn't actually change the fundamental GLM structure:
-
-| **GLM Component** | **Scalar Notation** | **Matrix Notation** |
-|-------------------|---------------------|---------------------|
-| Linear Predictor | $\eta = \mathbf{x}^T\boldsymbol{\beta}$ | $\boldsymbol{\eta} = \mathbf{X}\boldsymbol{\beta}$ |
-| Natural Parameter | $\theta = \eta$ | $\boldsymbol{\theta} = \boldsymbol{\eta}$ |
-| Link Function | $g(\mu) = \eta$ | $g(\boldsymbol{\mu}) = \boldsymbol{\eta}$ (element-wise) |
-| Inverse Link | $\mu = g^{-1}(\eta)$ | $\boldsymbol{\mu} = g^{-1}(\boldsymbol{\eta})$ (element-wise) |
-
-The **distribution** and **link function** choices from the GLM table above apply identically whether we're thinking about one observation (scalar) or many observations (matrix).
-
-
-### Computational Considerations
-
-And the advantages go beyond simply convenience factors. When we work in modern libraries like NumPy, TensorFlow, etc, we gain the gain the performance advantages of **vectorization**. We also gain the benefit of handling all observations simultaneously through **batch processing** and open the opportunity to apply well-established algorithms for matrix operations, such as QR decomp, SVD, etc.
-
-
-However, this isn't also without its own drawbacks. If the design matrix $X$ has a very large $n$ number of observations, it can be extensive to load the entire thing into memory. Additionally, if we happen to have a very large $p$, then operations like matrix inversion can be expensive, since inversion is an $O(p^{3}$ operation. We also run the risk of numerical stability, if $X^{T}X$ is ill-conditioned.
-
-Fortunately, there are also many method available to address each of these, but its still important to keep in mind where/how these drawbacks might emerge.
-
-They include the following:
-
-- **regularization**: Using techniques like Ridge and Lasso regression can help improve matrix conditioning.
-- **dimensionality reduction:** We can use techniques such as Principle Component Analysis (PCA) to reduce the dimensions when $p$ is large.
-- **applying iterative solvers:** Explicity matrix inversion can be avoided with these techniques.
-- **sparse matrix representations:** This one is out of scope, but also something that can be investigated in a future post.
 
 ## Paper Flow
 
