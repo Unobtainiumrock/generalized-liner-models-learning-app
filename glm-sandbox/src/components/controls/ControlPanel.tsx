@@ -2,6 +2,7 @@ import { useAppStore } from '../../store/appStore';
 import { useGLM } from '../../hooks/useGLM';
 import { Slider } from './Slider';
 import { Dropdown } from './Dropdown';
+// import { ValidationMessage } from '../ui/ValidationMessage';
 
 export const ControlPanel = () => {
   const {
@@ -88,6 +89,9 @@ export const ControlPanel = () => {
                 { value: 'normal', label: 'Normal' },
                 { value: 'poisson', label: 'Poisson' },
                 { value: 'bernoulli', label: 'Bernoulli' },
+                { value: 'gamma', label: 'Gamma' },
+                { value: 'negativeBinomial', label: 'Negative Binomial' },
+                { value: 'binomial', label: 'Binomial' },
               ]}
               onChange={(value) => setTruthConfig({ distribution: value as any })}
             />
@@ -99,6 +103,9 @@ export const ControlPanel = () => {
                 { value: 'identity', label: 'Identity' },
                 { value: 'log', label: 'Log' },
                 { value: 'logit', label: 'Logit' },
+                { value: 'inverse', label: 'Inverse' },
+                { value: 'probit', label: 'Probit' },
+                { value: 'cloglog', label: 'Complementary Log-Log' },
               ]}
               onChange={(value) => setTruthConfig({ linkFunction: value as any })}
             />
@@ -152,11 +159,17 @@ export const ControlPanel = () => {
             <input
               type="number"
               value={sampleSize}
-              onChange={(e) => setSampleSize(parseInt(e.target.value) || 100)}
+              onChange={(e) => {
+                const value = parseInt(e.target.value);
+                if (!isNaN(value)) {
+                  setSampleSize(value);
+                }
+              }}
               min={10}
-              max={1000}
+              max={10000}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
+            {/* Validation will be handled by the store */}
           </div>
           
           <button
