@@ -36,4 +36,9 @@
   .slider-value {
     @apply text-sm text-gray-500 font-mono;
   }
+
+  /* blog paragraph utility used by Paragraph component */
+  .blog-paragraph {
+    @apply text-gray-700 text-sm mb-3 leading-relaxed;
+  }
 }
