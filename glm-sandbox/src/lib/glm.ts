@@ -69,6 +69,12 @@ const randomGenerators = {
    * @returns Random number from Poisson(λ)
    */
   poisson: (lambda: number) => {
+    // Input validation
+    if (lambda < 0) {
+      throw new Error('Poisson distribution requires non-negative lambda parameter');
+    }
+    if (lambda === 0) return 0;
+    
     // Knuth's algorithm for Poisson distribution
     const L = Math.exp(-lambda);
     let k = 0;
@@ -87,7 +93,13 @@ const randomGenerators = {
    * @param p - Probability of success
    * @returns 1 with probability p, 0 with probability (1-p)
    */
-  bernoulli: (p: number) => Math.random() < p ? 1 : 0,
+  bernoulli: (p: number) => {
+    // Input validation
+    if (p < 0 || p > 1) {
+      throw new Error('Bernoulli distribution requires probability p in range [0, 1]');
+    }
+    return Math.random() < p ? 1 : 0;
+  },
   
   /**
    * Generate random number from Gamma distribution using shape-scale parameterization
@@ -96,6 +108,11 @@ const randomGenerators = {
    * @returns Random number from Gamma(α, θ)
    */
   gamma: (shape: number, scale: number = 1): number => {
+    // Input validation
+    if (shape <= 0 || scale <= 0) {
+      throw new Error('Gamma distribution requires positive shape and scale parameters');
+    }
+    
     // Marsaglia and Tsang's method
     if (shape < 1) {
       // Use transformation for shape < 1
@@ -106,6 +123,9 @@ const randomGenerators = {
     const c = 1 / Math.sqrt(9 * d);
     
     let x: number, v: number, u: number;
+    let attempts = 0;
+    const maxAttempts = 1000; // Prevent infinite loops
+    
     do {
       do {
         x = randomGenerators.normal(0, 1);
@@ -117,6 +137,11 @@ const randomGenerators = {
       
       if (u < 1 - 0.0331 * (x * x) * (x * x)) {
         return d * v * scale;
+      }
+      
+      attempts++;
+      if (attempts > maxAttempts) {
+        throw new Error('Gamma generation failed: too many attempts');
       }
     } while (Math.log(u) >= 0.5 * x * x + d * (1 - v + Math.log(v)));
     
@@ -191,48 +216,66 @@ export const glmCalculations: GLMCalculations = {
    * @returns Array of generated data points
    */
   generateData: (params: GLMParameters, config: GLMConfig, sampleSize: number): DataPoint[] => {
+    // Input validation
+    if (sampleSize <= 0 || !Number.isInteger(sampleSize)) {
+      throw new Error('Sample size must be a positive integer');
+    }
+    if (sampleSize > 10000) {
+      throw new Error('Sample size cannot exceed 10,000 for performance reasons');
+    }
+    
     const data: DataPoint[] = [];
     const xMin = -5;
     const xMax = 5;
     
-    for (let i = 0; i < sampleSize; i++) {
-      const x = xMin + (xMax - xMin) * Math.random();
-      const mean = glmCalculations.meanResponse(x, params, config);
-      
-      let y: number;
-      switch (config.distribution) {
-        case 'normal':
-          y = randomGenerators.normal(mean, 1);
-          break;
-        case 'poisson':
-          y = randomGenerators.poisson(Math.max(mean, 0.1));
-          break;
-        case 'bernoulli':
-          y = randomGenerators.bernoulli(Math.max(0, Math.min(1, mean)));
-          break;
-        case 'gamma':
-          // For gamma, mean = shape * scale, so shape = mean / scale
-          const gammaShape = Math.max(mean / 1, 0.1); // scale = 1
-          y = randomGenerators.gamma(gammaShape, 1);
-          break;
-        case 'negativeBinomial':
-          // For negative binomial, mean = r * p / (1-p), variance = r * p / (1-p)^2
-          // Using r = 5, solve for p: p = mean / (mean + r)
-          const nbR = 5;
-          const nbP = Math.max(0.01, Math.min(0.99, mean / (mean + nbR)));
-          y = randomGenerators.negativeBinomial(nbR, nbP);
-          break;
-        case 'binomial':
-          // For binomial, mean = n * p, so p = mean / n
-          const binN = 10; // fixed number of trials
-          const binP = Math.max(0, Math.min(1, mean / binN));
-          y = randomGenerators.binomial(binN, binP);
-          break;
-        default:
-          y = mean;
+    try {
+      for (let i = 0; i < sampleSize; i++) {
+        const x = xMin + (xMax - xMin) * Math.random();
+        const mean = glmCalculations.meanResponse(x, params, config);
+        
+        let y: number;
+        switch (config.distribution) {
+          case 'normal':
+            y = randomGenerators.normal(mean, 1);
+            break;
+          case 'poisson':
+            y = randomGenerators.poisson(Math.max(mean, 0.1));
+            break;
+          case 'bernoulli':
+            y = randomGenerators.bernoulli(Math.max(0, Math.min(1, mean)));
+            break;
+          case 'gamma':
+            // For gamma, mean = shape * scale, so shape = mean / scale
+            const gammaShape = Math.max(mean / 1, 0.1); // scale = 1
+            y = randomGenerators.gamma(gammaShape, 1);
+            break;
+          case 'negativeBinomial':
+            // For negative binomial, mean = r * p / (1-p), variance = r * p / (1-p)^2
+            // Using r = 5, solve for p: p = mean / (mean + r)
+            const nbR = 5;
+            const nbP = Math.max(0.01, Math.min(0.99, mean / (mean + nbR)));
+            y = randomGenerators.negativeBinomial(nbR, nbP);
+            break;
+          case 'binomial':
+            // For binomial, mean = n * p, so p = mean / n
+            const binN = 10; // fixed number of trials
+            const binP = Math.max(0, Math.min(1, mean / binN));
+            y = randomGenerators.binomial(binN, binP);
+            break;
+          default:
+            y = mean;
+        }
+        
+        // Validate generated value
+        if (!isFinite(y)) {
+          console.warn(`Generated non-finite value: ${y} for x=${x}, mean=${mean}`);
+          y = isNaN(y) ? 0 : (y === Infinity ? 1e6 : -1e6);
+        }
+        
+        data.push({ x, y });
       }
-      
-      data.push({ x, y });
+    } catch (error) {
+      throw new Error(`Data generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
     
     return data;
