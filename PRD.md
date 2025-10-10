@@ -1,9 +1,5 @@
 # Interactive GLM Learning Sandbox
 
-**Author:** Gemini  
-**Version:** 1.0  
-**Date:** 2025-09-05
-
 ## Table of Contents
 
 - [1. Overview](#1-overview)
