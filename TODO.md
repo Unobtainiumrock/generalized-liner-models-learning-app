@@ -7,3 +7,7 @@
 4. Verify the logical correctness of things like Knuth's algorithm for Poisson distributions.
 
 5. Hook up the API logic for OpenAI API and ensure that we are securely storing API keys and environment variables.
+
+6. Add in examples of the matrix equation forms for all of the other GLM setups and link function equivalents.
+
+7. Move practical standpoint and advatages/trade-offs of matrices approach to be higher up. Its flow is broken apart by the recent addition of the iterated WLS.
