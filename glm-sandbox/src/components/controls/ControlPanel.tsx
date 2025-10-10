@@ -2,6 +2,7 @@ import { useAppStore } from '../../store/appStore';
 import { useGLM } from '../../hooks/useGLM';
 import { Slider } from './Slider';
 import { Dropdown } from './Dropdown';
+// import { ValidationMessage } from '../ui/ValidationMessage';
 
 export const ControlPanel = () => {
   const {
@@ -9,8 +10,10 @@ export const ControlPanel = () => {
     truthParams,
     truthConfig,
     estimatedParams,
+    dataPoints,
     sampleSize,
     isGeneratingData,
+    isAutoFitting,
     setMode,
     setTruthParams,
     setTruthConfig,
@@ -88,6 +91,9 @@ export const ControlPanel = () => {
                 { value: 'normal', label: 'Normal' },
                 { value: 'poisson', label: 'Poisson' },
                 { value: 'bernoulli', label: 'Bernoulli' },
+                { value: 'gamma', label: 'Gamma' },
+                { value: 'negativeBinomial', label: 'Negative Binomial' },
+                { value: 'binomial', label: 'Binomial' },
               ]}
               onChange={(value) => setTruthConfig({ distribution: value as any })}
             />
@@ -99,6 +105,9 @@ export const ControlPanel = () => {
                 { value: 'identity', label: 'Identity' },
                 { value: 'log', label: 'Log' },
                 { value: 'logit', label: 'Logit' },
+                { value: 'inverse', label: 'Inverse' },
+                { value: 'probit', label: 'Probit' },
+                { value: 'cloglog', label: 'Complementary Log-Log' },
               ]}
               onChange={(value) => setTruthConfig({ linkFunction: value as any })}
             />
@@ -132,9 +141,20 @@ export const ControlPanel = () => {
             
             <button
               onClick={handleAutoFit}
-              className="w-full btn-primary"
+              disabled={isAutoFitting || dataPoints.length === 0}
+              className={`w-full btn-primary ${isAutoFitting ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              Auto-Fit
+              {isAutoFitting ? (
+                <div className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Auto-Fitting...
+                </div>
+              ) : (
+                'Auto-Fit'
+              )}
             </button>
           </div>
         </div>
@@ -152,11 +172,17 @@ export const ControlPanel = () => {
             <input
               type="number"
               value={sampleSize}
-              onChange={(e) => setSampleSize(parseInt(e.target.value) || 100)}
+              onChange={(e) => {
+                const value = parseInt(e.target.value);
+                if (!isNaN(value)) {
+                  setSampleSize(value);
+                }
+              }}
               min={10}
-              max={1000}
+              max={10000}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
+            {/* Validation will be handled by the store */}
           </div>
           
           <button
