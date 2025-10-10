@@ -54,7 +54,8 @@ export const LinearSpacePlot = React.memo(({ width = 600, height = 300 }: Linear
         .datum(truthYValues)
         .attr('fill', 'none')
         .attr('stroke', '#f97316')
-        .attr('stroke-width', 3)
+        .attr('stroke-width', 4)
+        .attr('stroke-linecap', 'round')
         .attr('d', line)
         .attr('aria-label', 'Truth model line');
 
@@ -64,8 +65,9 @@ export const LinearSpacePlot = React.memo(({ width = 600, height = 300 }: Linear
           .datum(estimatedYValues)
           .attr('fill', 'none')
           .attr('stroke', '#3b82f6')
-          .attr('stroke-width', 3)
-          .attr('stroke-dasharray', '5,5')
+          .attr('stroke-width', 5)
+          .attr('stroke-dasharray', '8,4')
+          .attr('stroke-linecap', 'round')
           .attr('aria-label', 'Estimated model line');
       }
 
