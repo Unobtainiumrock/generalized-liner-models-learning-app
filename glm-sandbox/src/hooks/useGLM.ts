@@ -10,9 +10,11 @@ export const useGLM = () => {
     estimatedParams,
     dataPoints,
     sampleSize,
+    isAutoFitting,
     setDataPoints,
     setEstimatedParams,
     setIsGeneratingData,
+    setIsAutoFitting,
   } = useAppStore();
 
   // Track previous parameters to detect changes
@@ -79,8 +81,9 @@ export const useGLM = () => {
         prevConfigRef.current = { ...truthConfig };
       }
       
-      if (estimatedParamsChanged) {
+      if (estimatedParamsChanged && !isAutoFitting) {
         // In estimation mode, data points should follow the estimated line
+        // But not during auto-fitting to prevent feedback loops
         const transformedData = dataPoints.map(point => {
           const oldMean = glmCalculations.meanResponse(point.x, prevEstimatedParams, prevConfig);
           const newMean = glmCalculations.meanResponse(point.x, estimatedParams, truthConfig);
@@ -93,19 +96,40 @@ export const useGLM = () => {
         });
         
         setDataPoints(transformedData);
-        
-        // Update refs
+      }
+      
+      // Always update refs
+      if (estimatedParamsChanged) {
         prevEstimatedParamsRef.current = { ...estimatedParams };
       }
     }
-  }, [truthParams, estimatedParams, truthConfig, dataPoints, setDataPoints]);
+  }, [truthParams, estimatedParams, truthConfig, dataPoints, isAutoFitting, setDataPoints]);
 
   const autoFit = useCallback(() => {
-    if (dataPoints.length === 0) return;
+    if (dataPoints.length === 0 || isAutoFitting) return;
     
-    const estimated = glmCalculations.estimateParameters(dataPoints, truthConfig);
-    setEstimatedParams(estimated);
-  }, [dataPoints, truthConfig, setEstimatedParams]);
+    setIsAutoFitting(true);
+    
+    try {
+      const estimated = glmCalculations.estimateParameters(dataPoints, truthConfig);
+      
+      // Add safeguards to prevent extreme parameter values
+      const safeEstimated = {
+        intercept: Math.max(-10, Math.min(10, estimated.intercept)),
+        slope: Math.max(-5, Math.min(5, estimated.slope))
+      };
+      
+      setEstimatedParams(safeEstimated);
+      
+      // Reset the flag after a short delay
+      setTimeout(() => {
+        setIsAutoFitting(false);
+      }, 1000);
+    } catch (error) {
+      console.error('Auto-fit failed:', error);
+      setIsAutoFitting(false);
+    }
+  }, [dataPoints, truthConfig, isAutoFitting, setEstimatedParams, setIsAutoFitting]);
 
   const calculateLinearPredictor = useCallback((x: number, params: GLMParameters) => {
     return glmCalculations.linearPredictor(x, params);
