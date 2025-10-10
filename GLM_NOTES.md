@@ -59,7 +59,7 @@ $$
 ## A 3-step process for Designing a Link Function
 
 
-The goal is to constructe a function $g(\eta)$ that takes the natural domain of $\mu$ and maps it to $(-\infty, \infty)$, while also being monotonic an differentiable.*
+The goal is to constructe a function $g(\eta)$ that takes the natural domain of $\mu$ and maps it to $(-\infty, \infty)$, while also being monotonic and differentiable.*
 
 
 1. **Identify the Domain of the Mean ($\mu$)**
