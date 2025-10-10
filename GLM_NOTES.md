@@ -59,13 +59,13 @@ $$
 ## A 3-step process for Designing a Link Function
 
 
-The goal is to constructe a function $g(\eta)$ that takes the natural domain of $\mu$ and maps it to $(-\infty, \infty)$, while also being monotonic and differentiable.*
+The goal is to construct a function $g(\eta)$ that takes the natural domain of $\mu$ and maps it to $(-\infty, \infty)$, while also being monotonic and differentiable.*
 
 
 1. **Identify the Domain of the Mean ($\mu$)**
 
 
-First, we must determine the possible range of values for the expectd value of the response variable. This is dictated by its probability distribution.
+First, we must determine the possible range of values for the expected value of the response variable. This is dictated by its probability distribution.
 
 
 For example:
@@ -96,7 +96,7 @@ For this, we need a function that "explodes" to $+ \infty$ as $\mu$ approaches $
 Typically, ratios and logarithms are the best tools for accomplishing this.
 
 
-**Create a Ratio:** To ahndle the upper bound, crate a ratio that goes to infinity. The **odds**, $\frac{\mu}{1 - \mu}$ is a perfect candidate.
+**Create a Ratio:** To handle the upper bound, create a ratio that goes to infinity. The **odds**, $\frac{\mu}{1 - \mu}$ is a perfect candidate.
 
 
 - As $\mu \to 1$, the denominator $(1 - \mu) \to 0$, so the ratio $\to + \infty$
@@ -131,7 +131,7 @@ $$g(\mu) = \mu$$
 **Case 3: Domain is $(-\infty, \infty)$. Already Unbounded:**
 
 
-The domain of $\mu$ is already the same as the required range for $\eta$. Thus, no transformtations are needed. The simplest possible function that preserves the values is the identity function.
+The domain of $\mu$ is already the same as the required range for $\eta$. Thus, no transformations are needed. The simplest possible function that preserves the values is the identity function.
 
 
 $$g(\mu) = \mu$$
