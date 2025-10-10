@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
+import { config } from '../../config/env';
 
 export const ChatAssistant = () => {
   const { isChatOpen, setChatOpen, chatHistory, addChatMessage } = useAppStore();
@@ -19,16 +20,46 @@ export const ChatAssistant = () => {
     addChatMessage(userMessage);
     setInputMessage('');
 
-    // Simulate AI response (replace with actual API call)
-    setTimeout(() => {
+    try {
+      // Call the actual API
+      const response = await fetch(config.api.chatUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: inputMessage,
+          history: chatHistory,
+          context: {
+            currentMode: 'truth', // You'd get this from store
+            distribution: 'normal', // You'd get this from store
+            linkFunction: 'identity', // You'd get this from store
+          }
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
       const aiMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant' as const,
-        content: `I understand you're asking about "${inputMessage}". This is a placeholder response. In the full implementation, this would connect to the Gemini API with context about GLMs.`,
+        content: data.reply,
         timestamp: new Date(),
       };
       addChatMessage(aiMessage);
-    }, 1000);
+    } catch (error) {
+      const errorMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant' as const,
+        content: `Sorry, I encountered an error: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
+        timestamp: new Date(),
+      };
+      addChatMessage(errorMessage);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
