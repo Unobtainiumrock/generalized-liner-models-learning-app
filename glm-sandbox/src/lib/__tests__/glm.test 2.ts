@@ -91,47 +91,4 @@ describe('GLM Calculations', () => {
       expect(() => glmCalculations.estimateParameters(data, config)).toThrow('insufficient variation in X')
     })
   })
-
-  describe('input validation', () => {
-    it('should validate sample size in generateData', () => {
-      const params: GLMParameters = { intercept: 0, slope: 1 }
-      const config: GLMConfig = { distribution: 'normal', linkFunction: 'identity' }
-      
-      expect(() => glmCalculations.generateData(params, config, 0)).toThrow('Sample size must be a positive integer')
-      expect(() => glmCalculations.generateData(params, config, -1)).toThrow('Sample size must be a positive integer')
-      expect(() => glmCalculations.generateData(params, config, 1.5)).toThrow('Sample size must be a positive integer')
-      expect(() => glmCalculations.generateData(params, config, 10001)).toThrow('Sample size cannot exceed 10,000')
-    })
-
-    it('should validate distribution parameters', () => {
-      expect(() => glmCalculations.generateData({ intercept: 0, slope: 1 }, { distribution: 'poisson', linkFunction: 'log' }, 10)).not.toThrow()
-      expect(() => glmCalculations.generateData({ intercept: 0, slope: 1 }, { distribution: 'bernoulli', linkFunction: 'logit' }, 10)).not.toThrow()
-    })
-  })
-
-  describe('edge cases', () => {
-    it('should handle extreme parameter values', () => {
-      const params: GLMParameters = { intercept: 1000, slope: -1000 }
-      const config: GLMConfig = { distribution: 'normal', linkFunction: 'identity' }
-      const data = glmCalculations.generateData(params, config, 10)
-      
-      expect(data).toHaveLength(10)
-      data.forEach(point => {
-        expect(isFinite(point.x)).toBe(true)
-        expect(isFinite(point.y)).toBe(true)
-      })
-    })
-
-    it('should handle zero mean for Poisson', () => {
-      const params: GLMParameters = { intercept: -100, slope: 0 }
-      const config: GLMConfig = { distribution: 'poisson', linkFunction: 'log' }
-      const data = glmCalculations.generateData(params, config, 10)
-      
-      expect(data).toHaveLength(10)
-      data.forEach(point => {
-        expect(point.y).toBeGreaterThanOrEqual(0)
-        expect(Number.isInteger(point.y)).toBe(true)
-      })
-    })
-  })
 })

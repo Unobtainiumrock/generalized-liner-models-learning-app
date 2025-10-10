@@ -36,12 +36,18 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
 
       const margin = { top: 20, right: 20, bottom: 40, left: 60 };
 
+      // Dynamic scaling based on data
+      const allYValues = [...truthYValues, ...estimatedYValues, ...dataPoints.map(p => p.y)];
+      const yMin = Math.min(...allYValues);
+      const yMax = Math.max(...allYValues);
+      const yPadding = (yMax - yMin) * 0.1 || 1; // 10% padding or 1 if no variation
+
       const xScale = d3.scaleLinear()
         .domain([-5, 5])
         .range([margin.left, width - margin.right]);
 
       const yScale = d3.scaleLinear()
-        .domain([-5, 15])
+        .domain([yMin - yPadding, yMax + yPadding])
         .range([height - margin.bottom, margin.top]);
 
       // Create line generator
@@ -71,8 +77,11 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
           .attr('aria-label', 'Estimated model curve');
       }
 
-      // Add data points
+      // Add data points with performance optimization for large datasets
       if (dataPoints.length > 0) {
+        const pointRadius = dataPoints.length > 1000 ? 2 : 3; // Smaller points for large datasets
+        const pointOpacity = dataPoints.length > 1000 ? 0.4 : 0.6; // Lower opacity for large datasets
+        
         svg.selectAll('.data-point')
           .data(dataPoints)
           .enter()
@@ -80,9 +89,9 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
           .attr('class', 'data-point')
           .attr('cx', d => xScale(d.x))
           .attr('cy', d => yScale(d.y))
-          .attr('r', 3)
+          .attr('r', pointRadius)
           .attr('fill', '#6b7280')
-          .attr('opacity', 0.6)
+          .attr('opacity', pointOpacity)
           .attr('aria-label', 'Data point');
       }
 
@@ -100,11 +109,11 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
         .call(yAxis)
         .attr('aria-label', 'Y-axis');
 
-      // Add axis labels
+      // Add axis labels with enhanced accessibility
       svg.append('text')
         .attr('transform', `translate(${width / 2}, ${height - 5})`)
         .style('text-anchor', 'middle')
-        .text('X')
+        .text('X (Predictor)')
         .attr('aria-label', 'X-axis label');
 
       svg.append('text')
@@ -112,8 +121,12 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
         .attr('y', 15)
         .attr('x', 0 - height / 2)
         .style('text-anchor', 'middle')
-        .text('Y')
+        .text('Y (Response)')
         .attr('aria-label', 'Y-axis label');
+
+      // Add chart title for screen readers
+      svg.append('title')
+        .text(`Response Space Plot showing ${dataPoints.length} data points with ${mode === 'estimation' ? 'truth and estimated' : 'truth'} model curves`);
 
     } catch (err) {
       setError({
