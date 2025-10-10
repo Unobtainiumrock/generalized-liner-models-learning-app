@@ -439,7 +439,7 @@ The **distribution** and **link function** choices from the GLM table above appl
 
 ### Computational Considerations
 
-And the advantages go beyond simply convenience factors. When we work in modern libraries like NumPy, TensorFlow, etc, we gain the gain the performance advantages of **vectorization**. We also gain the benefit of handling all observations simultaneously through **batch processing** and open the opportunity to apply well-established algorithms for matrix operations, such as QR decomp, SVD, etc.
+And the advantages go beyond simply convenience factors. When we work in modern libraries like NumPy, TensorFlow, etc, we gain the performance advantages of **vectorization**. We also gain the benefit of handling all observations simultaneously through **batch processing** and open the opportunity to apply well-established algorithms for matrix operations, such as QR decomp, SVD, etc.
 
 
 However, this isn't also without its own drawbacks. If the design matrix $X$ has a very large $n$ number of observations, it can be extensive to load the entire thing into memory. Additionally, if we happen to have a very large $p$, then operations like matrix inversion can be expensive, since inversion is an $O(p^{3}$ operation. We also run the risk of numerical stability, if $X^{T}X$ is ill-conditioned.
@@ -455,7 +455,7 @@ They include the following:
 
 ### The Hidden Identity: Weight Matrices Across Distributions
 
-There's some other interesting things we should bring attention to. When we work with GLMs at the matrix-level, we can see how the link functions crop up in the diagonal weight matrix.
+There're some other interesting things we should bring attention to. When we work with GLMs at the matrix-level, we can see how the link functions crop up in the diagonal weight matrix.
 
 There's actually an implicit identity matrix $\mathbf{I}_n$ between $\mathbf{X}^T$ and $\mathbf{X}$ for other distributions under the GLM framework we have. Let's make this explicit.
 
@@ -509,7 +509,7 @@ The table below shows how the weight matrix changes for different distributions 
    $$z_i^{(t)} = \eta_i^{(t)} + (y_i - \mu_i^{(t)}) \frac{d\eta}{d\mu}\bigg|_{\mu=\mu_i^{(t)}}$$
    where $\frac{d\eta}{d\mu}$ is the derivative of the link function.
 
-5. You can also see that the terms in the weight column of the table show the weight entries being a direct representation of their corrseponding link functions. 
+5. You can also see that the terms in the weight column of the table show the weight entries being a direct representation of their corresponding link functions. 
 
 ### Why Weights Matter: A Conceptual View
 
