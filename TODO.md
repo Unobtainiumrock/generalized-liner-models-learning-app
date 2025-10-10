@@ -8,4 +8,12 @@
 
 5. Hook up the API logic for OpenAI API and ensure that we are securely storing API keys and environment variables.
 
-6. 
+6. Add in examples of the matrix equation forms for all of the other GLM setups and link function equivalents.
+
+7. Move practical standpoint and advatages/trade-offs of matrices approach to be higher up. Its flow is broken apart by the recent addition of the iterated WLS.
+
+8. Polish up the section on the iterated WLS section.
+
+9. Need to add (t) superscripts to the iterated WLS table for the matrices.
+
+10. Give more attention to the relationship of the variance to the link functions, especially in the iterated WSL table.
