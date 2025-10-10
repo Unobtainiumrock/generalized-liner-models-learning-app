@@ -14,14 +14,14 @@ export interface MatrixDataPoint {
 }
 
 export interface MatrixGLMConfig {
-  distribution: 'normal' | 'poisson' | 'bernoulli';
-  linkFunction: 'identity' | 'log' | 'logit';
+  distribution: 'normal' | 'poisson' | 'bernoulli' | 'gamma' | 'negativeBinomial' | 'binomial';
+  linkFunction: 'identity' | 'log' | 'logit' | 'inverse' | 'probit' | 'cloglog';
   numPredictors: number; // number of predictors (excluding intercept)
 }
 
 export interface GLMConfig {
-  distribution: 'normal' | 'poisson' | 'bernoulli';
-  linkFunction: 'identity' | 'log' | 'logit';
+  distribution: 'normal' | 'poisson' | 'bernoulli' | 'gamma' | 'negativeBinomial' | 'binomial';
+  linkFunction: 'identity' | 'log' | 'logit' | 'inverse' | 'probit' | 'cloglog';
 }
 
 export interface DataPoint {
@@ -55,6 +55,45 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+}
+
+// Error handling types
+export interface GLMError {
+  code: 'INVALID_PARAMETERS' | 'ESTIMATION_FAILED' | 'DATA_GENERATION_FAILED' | 'API_ERROR';
+  message: string;
+  details?: unknown;
+}
+
+// API response types
+export interface ChatApiResponse {
+  reply: string;
+  error?: string;
+}
+
+export interface ChatApiRequest {
+  message: string;
+  history: ChatMessage[];
+  context?: {
+    currentMode: 'truth' | 'estimation';
+    distribution: string;
+    linkFunction: string;
+  };
+}
+
+// Validation types
+export interface ValidationResult {
+  isValid: boolean;
+  errors: string[];
+}
+
+// D3 selection types
+export type D3Selection = d3.Selection<SVGSVGElement, unknown, null, undefined>;
+export type D3Scale = d3.ScaleLinear<number, number>;
+
+// Enhanced GLM state with error handling
+export interface GLMStateWithErrors extends GLMState {
+  error: GLMError | null;
+  isLoading: boolean;
 }
 
 export interface GLMCalculations {
