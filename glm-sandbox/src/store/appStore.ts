@@ -6,6 +6,7 @@ interface AppStore extends GLMState {
   // Error and loading states
   error: GLMError | null;
   isLoading: boolean;
+  isAutoFitting: boolean;
   
   // Actions
   setTruthParams: (params: Partial<GLMParameters>) => ValidationResult;
@@ -15,6 +16,7 @@ interface AppStore extends GLMState {
   setSampleSize: (size: number) => ValidationResult;
   setMode: (mode: 'truth' | 'estimation') => void;
   setIsGeneratingData: (isGenerating: boolean) => void;
+  setIsAutoFitting: (isAutoFitting: boolean) => void;
   addChatMessage: (message: ChatMessage) => void;
   setChatOpen: (isOpen: boolean) => void;
   setError: (error: GLMError | null) => void;
@@ -76,6 +78,7 @@ export const useAppStore = create<AppStore>()(
       ...defaultState,
       error: null,
       isLoading: false,
+      isAutoFitting: false,
       
       setTruthParams: (params) => {
         const validation = validateParameters(params);
@@ -145,6 +148,8 @@ export const useAppStore = create<AppStore>()(
       setMode: (mode) => set({ mode }),
       
       setIsGeneratingData: (isGenerating) => set({ isGeneratingData: isGenerating }),
+      
+      setIsAutoFitting: (isAutoFitting) => set({ isAutoFitting }),
       
       addChatMessage: (message) =>
         set((state) => ({
