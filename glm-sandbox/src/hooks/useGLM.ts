@@ -59,7 +59,7 @@ export const useGLM = () => {
         prevConfig.distribution !== truthConfig.distribution ||
         prevConfig.linkFunction !== truthConfig.linkFunction;
       
-      if (truthParamsChanged || estimatedParamsChanged || configChanged) {
+      if (truthParamsChanged || configChanged) {
         // Transform existing data points to follow the new truth line
         const transformedData = dataPoints.map(point => {
           const oldMean = glmCalculations.meanResponse(point.x, prevTruthParams, prevConfig);
@@ -76,8 +76,26 @@ export const useGLM = () => {
         
         // Update refs
         prevTruthParamsRef.current = { ...truthParams };
-        prevEstimatedParamsRef.current = { ...estimatedParams };
         prevConfigRef.current = { ...truthConfig };
+      }
+      
+      if (estimatedParamsChanged) {
+        // In estimation mode, data points should follow the estimated line
+        const transformedData = dataPoints.map(point => {
+          const oldMean = glmCalculations.meanResponse(point.x, prevEstimatedParams, prevConfig);
+          const newMean = glmCalculations.meanResponse(point.x, estimatedParams, truthConfig);
+          
+          // Calculate the offset from the old mean and apply it to the new mean
+          const offset = point.y - oldMean;
+          const newY = newMean + offset;
+          
+          return { x: point.x, y: newY };
+        });
+        
+        setDataPoints(transformedData);
+        
+        // Update refs
+        prevEstimatedParamsRef.current = { ...estimatedParams };
       }
     }
   }, [truthParams, estimatedParams, truthConfig, dataPoints, setDataPoints]);
