@@ -61,7 +61,7 @@ const validateSampleSize = (size: number): ValidationResult => {
 const defaultState: GLMState = {
   truthParams: { intercept: 0, slope: 1 },
   truthConfig: { distribution: 'normal', linkFunction: 'identity' },
-  estimatedParams: { intercept: 0, slope: 1 },
+  estimatedParams: { intercept: 0.5, slope: 0.8 }, // Different from truth to make blue line visible
   dataPoints: [],
   sampleSize: 100,
   mode: 'truth',

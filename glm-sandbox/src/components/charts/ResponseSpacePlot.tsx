@@ -60,6 +60,7 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
 
       // Estimated curve (blue) - only show in estimation mode
       if (mode === 'estimation' && estimatedYValues.length > 0) {
+        console.log('Drawing estimated curve with', estimatedYValues.length, 'points');
         svg.append('path')
           .datum(estimatedYValues)
           .attr('fill', 'none')
@@ -67,6 +68,8 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
           .attr('stroke-width', 3)
           .attr('stroke-dasharray', '5,5')
           .attr('aria-label', 'Estimated model curve');
+      } else {
+        console.log('Not drawing estimated curve. Mode:', mode, 'Values length:', estimatedYValues.length);
       }
 
       // Add data points
