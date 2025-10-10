@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ControlPanel } from '../controls/ControlPanel';
 import { TwoSpacesVisualization } from '../charts/TwoSpacesVisualization';
 import { ChatAssistant } from '../ui/ChatAssistant';
+import { Blog } from '../blogs/Blog';
 
 export const MainLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -33,9 +34,15 @@ export const MainLayout = () => {
           </div>
         </header>
 
-        {/* Visualization Area */}
-        <main className="flex-1 p-6">
-          <TwoSpacesVisualization />
+        {/* Main area: Blog above the visualization, centered with spacing and scroll when needed */}
+        <main className="flex-1 p-6 overflow-auto">
+          <div className="max-w-4xl mx-auto">
+            <Blog />
+
+            <div className="mt-6">
+              <TwoSpacesVisualization />
+            </div>
+          </div>
         </main>
       </div>
 
