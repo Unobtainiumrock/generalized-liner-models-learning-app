@@ -9,15 +9,52 @@ import {
   MatrixGLMCalculations
 } from '../types';
 
-// Link functions
+/**
+ * Inverse link functions for GLM transformations
+ * These functions transform the linear predictor η to the mean response μ
+ */
 const inverseLinkFunctions = {
+  /** Identity link: μ = η (used for normal distribution) */
   identity: (x: number) => x,
+  /** Log link: μ = exp(η) (used for Poisson distribution) */
   log: (x: number) => Math.exp(x),
+  /** Logit link: μ = 1/(1 + exp(-η)) (used for Bernoulli distribution) */
   logit: (x: number) => 1 / (1 + Math.exp(-x)),
+  /** Inverse link: μ = 1/η (used for gamma distribution) */
+  inverse: (x: number) => 1 / x,
+  /** Probit link: μ = Φ(η) where Φ is the standard normal CDF */
+  probit: (x: number) => {
+    // Approximation of standard normal CDF
+    const a1 =  0.254829592;
+    const a2 = -0.284496736;
+    const a3 =  1.421413741;
+    const a4 = -1.453152027;
+    const a5 =  1.061405429;
+    const p  =  0.3275911;
+    
+    const sign = x >= 0 ? 1 : -1;
+    x = Math.abs(x) / Math.sqrt(2.0);
+    
+    const t = 1.0 / (1.0 + p * x);
+    const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+    
+    return 0.5 * (1.0 + sign * y);
+  },
+  /** Complementary log-log link: μ = 1 - exp(-exp(η)) */
+  cloglog: (x: number) => 1 - Math.exp(-Math.exp(x)),
 };
 
-// Random number generators
+/**
+ * Random number generators for different probability distributions
+ * Used to generate synthetic data from GLM models
+ */
 const randomGenerators = {
+  /**
+   * Generate random number from normal distribution using Box-Muller transform
+   * @param mean - Mean of the distribution
+   * @param variance - Variance of the distribution (default: 1)
+   * @returns Random number from N(mean, variance)
+   */
   normal: (mean: number, variance: number = 1) => {
     // Box-Muller transform for normal distribution
     const u1 = Math.random();
@@ -26,7 +63,18 @@ const randomGenerators = {
     return mean + Math.sqrt(variance) * z0;
   },
   
+  /**
+   * Generate random number from Poisson distribution using Knuth's algorithm
+   * @param lambda - Rate parameter (mean and variance)
+   * @returns Random number from Poisson(λ)
+   */
   poisson: (lambda: number) => {
+    // Input validation
+    if (lambda < 0) {
+      throw new Error('Poisson distribution requires non-negative lambda parameter');
+    }
+    if (lambda === 0) return 0;
+    
     // Knuth's algorithm for Poisson distribution
     const L = Math.exp(-lambda);
     let k = 0;
@@ -40,51 +88,211 @@ const randomGenerators = {
     return k - 1;
   },
   
-  bernoulli: (p: number) => Math.random() < p ? 1 : 0,
+  /**
+   * Generate random number from Bernoulli distribution
+   * @param p - Probability of success
+   * @returns 1 with probability p, 0 with probability (1-p)
+   */
+  bernoulli: (p: number) => {
+    // Input validation
+    if (p < 0 || p > 1) {
+      throw new Error('Bernoulli distribution requires probability p in range [0, 1]');
+    }
+    return Math.random() < p ? 1 : 0;
+  },
+  
+  /**
+   * Generate random number from Gamma distribution using shape-scale parameterization
+   * @param shape - Shape parameter (α)
+   * @param scale - Scale parameter (θ)
+   * @returns Random number from Gamma(α, θ)
+   */
+  gamma: (shape: number, scale: number = 1): number => {
+    // Input validation
+    if (shape <= 0 || scale <= 0) {
+      throw new Error('Gamma distribution requires positive shape and scale parameters');
+    }
+    
+    // Marsaglia and Tsang's method
+    if (shape < 1) {
+      // Use transformation for shape < 1
+      return randomGenerators.gamma(shape + 1, scale) * Math.pow(Math.random(), 1 / shape);
+    }
+    
+    const d = shape - 1 / 3;
+    const c = 1 / Math.sqrt(9 * d);
+    
+    let x: number, v: number, u: number;
+    let attempts = 0;
+    const maxAttempts = 1000; // Prevent infinite loops
+    
+    do {
+      do {
+        x = randomGenerators.normal(0, 1);
+        v = 1 + c * x;
+      } while (v <= 0);
+      
+      v = v * v * v;
+      u = Math.random();
+      
+      if (u < 1 - 0.0331 * (x * x) * (x * x)) {
+        return d * v * scale;
+      }
+      
+      attempts++;
+      if (attempts > maxAttempts) {
+        throw new Error('Gamma generation failed: too many attempts');
+      }
+    } while (Math.log(u) >= 0.5 * x * x + d * (1 - v + Math.log(v)));
+    
+    return d * v * scale;
+  },
+  
+  /**
+   * Generate random number from Negative Binomial distribution
+   * @param r - Number of failures until stopping
+   * @param p - Probability of success
+   * @returns Random number from NB(r, p)
+   */
+  negativeBinomial: (r: number, p: number) => {
+    // Generate as sum of r geometric random variables
+    let sum = 0;
+    for (let i = 0; i < r; i++) {
+      sum += Math.floor(Math.log(Math.random()) / Math.log(1 - p)) + 1;
+    }
+    return sum;
+  },
+  
+  /**
+   * Generate random number from Binomial distribution
+   * @param n - Number of trials
+   * @param p - Probability of success
+   * @returns Random number from Binomial(n, p)
+   */
+  binomial: (n: number, p: number) => {
+    let successes = 0;
+    for (let i = 0; i < n; i++) {
+      if (Math.random() < p) {
+        successes++;
+      }
+    }
+    return successes;
+  },
 };
 
+/**
+ * GLM calculation functions for single-predictor models
+ * Implements the core mathematical operations for Generalized Linear Models
+ */
 export const glmCalculations: GLMCalculations = {
+  /**
+   * Calculate the linear predictor η = β₀ + β₁x
+   * @param x - Predictor value
+   * @param params - GLM parameters (intercept β₀, slope β₁)
+   * @returns Linear predictor value η
+   */
   linearPredictor: (x: number, params: GLMParameters) => {
     return params.intercept + params.slope * x;
   },
   
+  /**
+   * Calculate the mean response μ = g⁻¹(η) where g is the link function
+   * @param x - Predictor value
+   * @param params - GLM parameters
+   * @param config - GLM configuration (distribution and link function)
+   * @returns Mean response value μ
+   */
   meanResponse: (x: number, params: GLMParameters, config: GLMConfig) => {
     const eta = glmCalculations.linearPredictor(x, params);
     const inverseLink = inverseLinkFunctions[config.linkFunction];
     return inverseLink(eta);
   },
   
+  /**
+   * Generate synthetic data from a GLM model
+   * @param params - True GLM parameters
+   * @param config - GLM configuration (distribution and link function)
+   * @param sampleSize - Number of data points to generate
+   * @returns Array of generated data points
+   */
   generateData: (params: GLMParameters, config: GLMConfig, sampleSize: number): DataPoint[] => {
+    // Input validation
+    if (sampleSize <= 0 || !Number.isInteger(sampleSize)) {
+      throw new Error('Sample size must be a positive integer');
+    }
+    if (sampleSize > 10000) {
+      throw new Error('Sample size cannot exceed 10,000 for performance reasons');
+    }
+    
     const data: DataPoint[] = [];
     const xMin = -5;
     const xMax = 5;
     
-    for (let i = 0; i < sampleSize; i++) {
-      const x = xMin + (xMax - xMin) * Math.random();
-      const mean = glmCalculations.meanResponse(x, params, config);
-      
-      let y: number;
-      switch (config.distribution) {
-        case 'normal':
-          y = randomGenerators.normal(mean, 1);
-          break;
-        case 'poisson':
-          y = randomGenerators.poisson(Math.max(mean, 0.1));
-          break;
-        case 'bernoulli':
-          y = randomGenerators.bernoulli(Math.max(0, Math.min(1, mean)));
-          break;
-        default:
-          y = mean;
+    try {
+      for (let i = 0; i < sampleSize; i++) {
+        const x = xMin + (xMax - xMin) * Math.random();
+        const mean = glmCalculations.meanResponse(x, params, config);
+        
+        let y: number;
+        switch (config.distribution) {
+          case 'normal':
+            y = randomGenerators.normal(mean, 1);
+            break;
+          case 'poisson':
+            y = randomGenerators.poisson(Math.max(mean, 0.1));
+            break;
+          case 'bernoulli':
+            y = randomGenerators.bernoulli(Math.max(0, Math.min(1, mean)));
+            break;
+          case 'gamma':
+            // For gamma, mean = shape * scale, so shape = mean / scale
+            const gammaShape = Math.max(mean / 1, 0.1); // scale = 1
+            y = randomGenerators.gamma(gammaShape, 1);
+            break;
+          case 'negativeBinomial':
+            // For negative binomial, mean = r * p / (1-p), variance = r * p / (1-p)^2
+            // Using r = 5, solve for p: p = mean / (mean + r)
+            const nbR = 5;
+            const nbP = Math.max(0.01, Math.min(0.99, mean / (mean + nbR)));
+            y = randomGenerators.negativeBinomial(nbR, nbP);
+            break;
+          case 'binomial':
+            // For binomial, mean = n * p, so p = mean / n
+            const binN = 10; // fixed number of trials
+            const binP = Math.max(0, Math.min(1, mean / binN));
+            y = randomGenerators.binomial(binN, binP);
+            break;
+          default:
+            y = mean;
+        }
+        
+        // Validate generated value
+        if (!isFinite(y)) {
+          console.warn(`Generated non-finite value: ${y} for x=${x}, mean=${mean}`);
+          y = isNaN(y) ? 0 : (y === Infinity ? 1e6 : -1e6);
+        }
+        
+        data.push({ x, y });
       }
-      
-      data.push({ x, y });
+    } catch (error) {
+      throw new Error(`Data generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
     
     return data;
   },
   
+  /**
+   * Estimate GLM parameters from data using appropriate method
+   * @param data - Array of observed data points
+   * @param config - GLM configuration (distribution and link function)
+   * @returns Estimated GLM parameters
+   * @throws Error if data is empty or has insufficient variation
+   */
   estimateParameters: (data: DataPoint[], config: GLMConfig): GLMParameters => {
+    if (data.length === 0) {
+      throw new Error('Cannot estimate parameters with no data');
+    }
+
     // Simple linear regression for normal distribution with identity link
     if (config.distribution === 'normal' && config.linkFunction === 'identity') {
       const n = data.length;
@@ -93,14 +301,63 @@ export const glmCalculations: GLMCalculations = {
       const sumXY = data.reduce((sum, point) => sum + point.x * point.y, 0);
       const sumXX = data.reduce((sum, point) => sum + point.x * point.x, 0);
       
-      const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+      const denominator = n * sumXX - sumX * sumX;
+      if (Math.abs(denominator) < 1e-10) {
+        throw new Error('Cannot estimate parameters: insufficient variation in X');
+      }
+      
+      const slope = (n * sumXY - sumX * sumY) / denominator;
       const intercept = (sumY - slope * sumX) / n;
       
       return { intercept, slope };
     }
     
-    // For other distributions, use a simple approximation
-    // In a real implementation, you'd use maximum likelihood estimation
+    // For Poisson distribution with log link, use simple approximation
+    if (config.distribution === 'poisson' && config.linkFunction === 'log') {
+      // Transform y to log scale and fit linear regression
+      const logY = data.map(point => Math.log(Math.max(point.y, 0.1)));
+      const n = data.length;
+      const sumX = data.reduce((sum, point) => sum + point.x, 0);
+      const sumLogY = logY.reduce((sum, y) => sum + y, 0);
+      const sumXLogY = data.reduce((sum, point, i) => sum + point.x * logY[i], 0);
+      const sumXX = data.reduce((sum, point) => sum + point.x * point.x, 0);
+      
+      const denominator = n * sumXX - sumX * sumX;
+      if (Math.abs(denominator) < 1e-10) {
+        throw new Error('Cannot estimate parameters: insufficient variation in X');
+      }
+      
+      const slope = (n * sumXLogY - sumX * sumLogY) / denominator;
+      const intercept = (sumLogY - slope * sumX) / n;
+      
+      return { intercept, slope };
+    }
+    
+    // For Bernoulli distribution with logit link, use simple approximation
+    if (config.distribution === 'bernoulli' && config.linkFunction === 'logit') {
+      // Transform y to logit scale and fit linear regression
+      const logitY = data.map(point => {
+        const p = Math.max(0.01, Math.min(0.99, point.y));
+        return Math.log(p / (1 - p));
+      });
+      const n = data.length;
+      const sumX = data.reduce((sum, point) => sum + point.x, 0);
+      const sumLogitY = logitY.reduce((sum, y) => sum + y, 0);
+      const sumXLogitY = data.reduce((sum, point, i) => sum + point.x * logitY[i], 0);
+      const sumXX = data.reduce((sum, point) => sum + point.x * point.x, 0);
+      
+      const denominator = n * sumXX - sumX * sumX;
+      if (Math.abs(denominator) < 1e-10) {
+        throw new Error('Cannot estimate parameters: insufficient variation in X');
+      }
+      
+      const slope = (n * sumXLogitY - sumX * sumLogitY) / denominator;
+      const intercept = (sumLogitY - slope * sumX) / n;
+      
+      return { intercept, slope };
+    }
+    
+    // Fallback: use simple linear approximation
     const xValues = data.map(point => point.x);
     const yValues = data.map(point => point.y);
     
@@ -108,6 +365,10 @@ export const glmCalculations: GLMCalculations = {
     const xMax = Math.max(...xValues);
     const yMin = Math.min(...yValues);
     const yMax = Math.max(...yValues);
+    
+    if (xMax === xMin) {
+      throw new Error('Cannot estimate parameters: no variation in X values');
+    }
     
     const slope = (yMax - yMin) / (xMax - xMin);
     const intercept = yMin - slope * xMin;
