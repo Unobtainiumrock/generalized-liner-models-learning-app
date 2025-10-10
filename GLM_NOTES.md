@@ -6,9 +6,12 @@ The random component is the choice of probability distribution for the response 
 
 The set of common distributions:
 
-$$
-\mathcal{D} = \{ Normal, Binomial, Poisson, Gamma, Negative, Inverse Gaussian \}
-$$
+The set of common distributions
+
+
+$$\mathcal{D} = \{ Normal, Binomial, Bernoulli, Poisson, Gamma, Exponential, Inverse Gaussian, Beta \}$$
+
+
 
 ## Systematic Component ($\eta$ or $S$)
 
