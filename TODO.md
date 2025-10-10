@@ -7,5 +7,3 @@
 4. Verify the logical correctness of things like Knuth's algorithm for Poisson distributions.
 
 5. Hook up the API logic for OpenAI API and ensure that we are securely storing API keys and environment variables.
-
-6. 
