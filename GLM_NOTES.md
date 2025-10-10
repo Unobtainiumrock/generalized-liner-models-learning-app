@@ -455,7 +455,7 @@ They include the following:
 
 ### The Hidden Identity: Weight Matrices Across Distributions
 
-There're some other interesting things we should bring attention to. When we work with GLMs at the matrix-level, we can see how the link functions crop up in the diagonal weight matrix.
+There are some other interesting things we should bring attention to. When we work with GLMs at the matrix-level, we can see how the link functions crop up in the diagonal weight matrix.
 
 There's actually an implicit identity matrix $\mathbf{I}_n$ between $\mathbf{X}^T$ and $\mathbf{X}$ for other distributions under the GLM framework we have. Let's make this explicit.
 
