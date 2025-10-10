@@ -241,7 +241,7 @@ The domain transformation approach is more general. It tells us what makes *any*
 The natural parameter approach is more restrictive. It singles out *one specific* link function that has special mathematical properties tied to the exponential family structure. This is the canonical link.
 
 
-Here's the key insight: **When you apply the domain transformation method to a distribution and happen to arrive at the same function that the natural parameter method gives you, you've found the canonical link.**
+**When you apply the domain transformation method to a distribution and happen to arrive at the same function that the natural parameter method gives you, you've found the canonical link.**
 
 
 ### Examples of Convergence
@@ -529,7 +529,7 @@ $$\mathbf{X}^T\mathbf{W}^{(t)}\mathbf{X} = \begin{bmatrix}
 \langle \mathbf{x}_p, \mathbf{1} \rangle_{\mathbf{W}^{(t)}} & \langle \mathbf{x}_p, \mathbf{x}_1 \rangle_{\mathbf{W}^{(t)}} & \langle \mathbf{x}_p, \mathbf{x}_2 \rangle_{\mathbf{W}^{(t)}} & \cdots & \langle \mathbf{x}_p, \mathbf{x}_p \rangle_{\mathbf{W}^{(t)}}
 \end{bmatrix}$$
 
-**Key Insight:** The weighted inner product $\langle \mathbf{x}_j, \mathbf{x}_k \rangle_{\mathbf{W}^{(t)}} = \sum_{i=1}^n w_i^{(t)} x_{ij} x_{ik}$ replaces the standard inner product $\langle \mathbf{x}_j, \mathbf{x}_k \rangle = \sum_{i=1}^n x_{ij} x_{ik}$. This fundamentally changes which observations have more influence on the parameter estimates—observations with higher weights $w_i^{(t)}$ contribute more to each element of the Gram matrix.
+The weighted inner product $\langle \mathbf{x}_j, \mathbf{x}_k \rangle_{\mathbf{W}^{(t)}} = \sum_{i=1}^n w_i^{(t)} x_{ij} x_{ik}$ replaces the standard inner product $\langle \mathbf{x}_j, \mathbf{x}_k \rangle = \sum_{i=1}^n x_{ij} x_{ik}$. This fundamentally changes which observations have more influence on the parameter estimates—observations with higher weights $w_i^{(t)}$ contribute more to each element of the Gram matrix.
 
 ### From a Practical Standpoint
 
