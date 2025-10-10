@@ -10,7 +10,7 @@ The random component is the choice of probability distribution for the response 
 The set of common distributions
 
 
-$$\mathcal{D} = \{ Normal, Binomial, Poisson, Gamma, Negative, Inverse Gaussian \}$$
+$$\mathcal{D} = \{ Normal, Binomial, Bernoulli, Poisson, Gamma, Exponential, Inverse Gaussian, Beta \}$$
 
 
 
