@@ -11,7 +11,7 @@ export const MainLayout = () => {
     <div className="flex h-screen">
       {/* Control Panel */}
       <div className={`${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 overflow-hidden bg-white border-r border-gray-200`}>
-        <ControlPanel />
+        < ControlPanel />
       </div>
 
       {/* Main Content */}
@@ -20,8 +20,8 @@ export const MainLayout = () => {
         <header className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">GLM Learning Sandbox</h1>
-              <p className="text-sm text-gray-600">Interactive Generalized Linear Models</p>
+              <h1 className="text-5xl font-bold text-gray-900">GLM Learning Sandbox</h1>
+              <p className="text-m text-gray-600">Interactive Generalized Linear Models</p>
             </div>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
