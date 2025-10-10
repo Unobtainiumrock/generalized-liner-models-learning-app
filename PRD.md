@@ -1,5 +1,9 @@
 # Interactive GLM Learning Sandbox
 
+**Author:** 
+**Version:** 1.0  
+**Date:** 2025-09-05
+
 ## Table of Contents
 
 - [1. Overview](#1-overview)
@@ -75,7 +79,19 @@ To create an intuitive, interactive tool that builds a deep, conceptual understa
 ## 4. Core Features & Functional Requirements
 
 ### 4.1. The Main Interface: GLM Sandbox
+// ...existing code...
+### 4.5. The "Two Spaces" Visualization
 
+This is the core visual component, always visible and updating in real-time.
+
+<!-- New explanatory paragraph: add it directly below this line -->
+A short explanatory paragraph goes here. For example: "The Linear Predictor space (top plot) shows the deterministic relationship between X and the linear predictor η = β₀ + β₁X. This helps users separate the role of the systematic component from the randomness introduced in the Response space below."
+
+Plot 1: Linear Predictor Space (eta)
+- **X-axis:** Predictor variable X.
+- **Y-axis:** Linear predictor η = β₀ + β₁X.
+- **Content:** Displays the model as a straight line. Both the "Truth" and "Estimated" lines will be shown here.
+...
 The application will consist of a single, unified view divided into three main sections: a control panel on the left, and the "Two Spaces" visualization area on the right.
 
 - **Layout:** A responsive two-column layout. The left column will house the control panel, and the right will contain the two visualization plots stacked vertically.
