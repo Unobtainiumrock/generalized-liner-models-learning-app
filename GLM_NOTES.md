@@ -36,11 +36,11 @@ $$
 
 ## A 3-step process for Designing a Link Function
 
-The goal is to constructe a function $g(\eta)$ that takes the natural domain of $\mu$ and maps it to $(-\infty, \infty)$, while also being monotonic an differentiable.\*
+The goal is to construct a function $g(\eta)$ that takes the natural domain of $\mu$ and maps it to $(-\infty, \infty)$, while also being monotonic and differentiable.*
 
 1. **Identify the Domain of the Mean ($\mu$)**
 
-   First, we must determine the possible range of values for the expectd value of the response variable. This is dictated by its probability distribution.
+   First, we must determine the possible range of values for the expected value of the response variable. This is dictated by its probability distribution.
 
    For example:
 
@@ -58,7 +58,7 @@ The goal is to constructe a function $g(\eta)$ that takes the natural domain of 
 
    Typically, ratios and logarithms are the best tools for accomplishing this.
 
-   **Create a Ratio:** To ahndle the upper bound, crate a ratio that goes to infinity. The **odds**, $\frac{\mu}{1 - \mu}$ is a perfect candidate.
+   **Create a Ratio:** To handle the upper bound, create a ratio that goes to infinity. The **odds**, $\frac{\mu}{1 - \mu}$ is a perfect candidate.
 
    - As $\mu \to 1$, the denominator $(1 - \mu) \to 0$, so the ratio $\to + \infty$
    - As $\mu \to 0$, the ratio $\to 0$
@@ -81,7 +81,7 @@ The goal is to constructe a function $g(\eta)$ that takes the natural domain of 
 
    **Case 3: Domain is $(-\infty, \infty)$. Already Unbounded:**
 
-   The domain of $\mu$ is already the same as the required range for $\eta$. Thus, no transformtations are needed. The simplest possible function that preserves the values is the identity function.
+   The domain of $\mu$ is already the same as the required range for $\eta$. Thus, no transformations are needed. The simplest possible function that preserves the values is the identity function.
 
    $$g(\mu) = \mu$$
 
@@ -325,7 +325,43 @@ The **distribution** and **link function** choices from the GLM table above appl
 
 ### Computational Considerations
 
-And the advantages go beyond simply convenience factors. When we work in modern librari
+And the advantages go beyond simply convenience factors. When we work in modern libraries like NumPy, TensorFlow, etc, we gain the performance advantages of **vectorization**. We also gain the benefit of handling all observations simultaneously through **batch processing** and open the opportunity to apply well-established algorithms for matrix operations, such as QR decomp, SVD, etc.
+
+However, this isn't also without its own drawbacks. If the design matrix $X$ has a very large $n$ number of observations, it can be extensive to load the entire thing into memory. Additionally, if we happen to have a very large $p$, then operations like matrix inversion can be expensive, since inversion is an $O(p^{3}$ operation. We also run the risk of numerical stability, if $X^{T}X$ is ill-conditioned.
+
+Fortunately, there are also many method available to address each of these, but its still important to keep in mind where/how these drawbacks might emerge.
+
+They include the following:
+
+- **regularization**: Using techniques like Ridge and Lasso regression can help improve matrix conditioning.
+- **dimensionality reduction:** We can use techniques such as Principle Component Analysis (PCA) to reduce the dimensions when $p$ is large.
+- **applying iterative solvers:** Explicity matrix inversion can be avoided with these techniques.
+- **sparse matrix representations:** This one is out of scope, but also something that can be investigated in a future post.
+
+### The Hidden Identity: Weight Matrices Across Distributions
+
+There are some other interesting things we should bring attention to. When we work with GLMs at the matrix-level, we can see how the link functions crop up in the diagonal weight matrix.
+
+There's actually an implicit identity matrix $\mathbf{I}_n$ between $\mathbf{X}^T$ and $\mathbf{X}$ for other distributions under the GLM framework we have. Let's make this explicit.
+
+For the **normal distribution with identity link**, the estimation equation we saw:
+
+$$\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$$
+
+can actually be written more explicitly as:
+
+$$\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{I}_n\mathbf{X})^{-1}\mathbf{X}^T\mathbf{I}_n\mathbf{y}$$
+
+Where $\mathbf{I}_n$ is the $n \times n$ identity matrix. This identity matrix represents **equal weighting** of all observations—each data point contributes equally to the parameter estimates.
+
+However, for other distributions in the GLM framework, this identity matrix is replaced by a **weight matrix** $\mathbf{W}^{(t)}$, which accounts for the different variance structures inherent to each distribution:
+
+$$\hat{\boldsymbol{\beta}}^{(t+1)} = (\mathbf{X}^T\mathbf{W}^{(t)}\mathbf{X})^{-1}\mathbf{X}^T\mathbf{W}^{(t)}\mathbf{z}^{(t)}$$
+
+Where:
+- $\mathbf{W}^{(t)} = \text{diag}(w_1^{(t)}, w_2^{(t)}, \ldots, w_n^{(t)})$ is an $n \times n$ diagonal **weight matrix** at iteration $t$
+- $\mathbf{z}^{(t)}$ is the **working response vector** at iteration $t$ (a transformed version of $\mathbf{y}$)
+- The weights $w_i^{(t)}$ depend on the distribution and current parameter estimates $\hat{\boldsymbol{\beta}}^{(t)}$
 
 This is the core of **Iteratively Reweighted Least Squares (IRLS)**.
 
@@ -357,7 +393,7 @@ The table below shows how the weight matrix changes for different distributions 
    $$z_i^{(t)} = \eta_i^{(t)} + (y_i - \mu_i^{(t)}) \frac{d\eta}{d\mu}\bigg|_{\mu=\mu_i^{(t)}}$$
    where $\frac{d\eta}{d\mu}$ is the derivative of the link function.
 
-5. You can also see that the terms in the weight column of the table show the weight entries being a direct representation of their corrseponding link functions.
+5. You can also see that the terms in the weight column of the table show the weight entries being a direct representation of their corresponding link functions.
 
 ### Why Weights Matter: A Conceptual View
 
@@ -422,13 +458,13 @@ The weighted inner product $\langle \mathbf{x}_j, \mathbf{x}_k \rangle_{\mathbf{
 
 3. Now, lay out all the GLM pieces:
 
-    - The random component
+   - The random component
 
-    - The systematic component ($\eta$ or $S$)
+   - The systematic component ($\eta$ or $S$)
 
-    - The link function
+   - The link function
 
-    Talk about them in terms of being a set, a realization of a funcitonal form, and aother set respectively.
+   Talk about them in terms of being a set, a realization of a funcitonal form, and aother set respectively.
 
 
 Give the floor for future investigation into non-cannonical link functions.
