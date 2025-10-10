@@ -23,8 +23,8 @@ export const Blog = () => {
 
       <Paragraph className="text-lg text-black leading-relaxed">
         In Linear Regression, we first start off with the foundation of Ordinary Least Squares. 
-        OLS is the most common way to estimate a model,it find the best fit line by minimizing erros. 
-        one predictor X and  The goal for this model
+        OLS is the most common way to estimate a model,it find the best fit line by minimizing squared 
+        errors. So the OLS can be applied on Simple Linear Regression Model.  one predictor X and  The goal for this model
         is to estimate <InlineMath math = {`\\beta_0,\\beta_1`}/> 
       </Paragraph>
      
