@@ -5,9 +5,9 @@ This template provides quick navigation to key concepts in the GLM framework. We
 ## Core GLM Components
 
 ### 1. Understanding the Three Components
-- [The Random Component (𝒟)](GLM_NOTES.md#the-random-component-mathcald)
-- [Systematic Component (η or S)](GLM_NOTES.md#systematic-component-eta-or-s)
-- [Link Function (ℒ)](GLM_NOTES.md#link-function-mathcall)
+- [The Random Component ($\mathcal{D}$)](GLM_NOTES.md#the-random-component-mathcald)
+- [Systematic Component ($\eta$ or $S$)](GLM_NOTES.md#systematic-component-eta-or-s)
+- [Link Function ($\mathcal{L}$)](GLM_NOTES.md#link-function-mathcall)
 
 ### 2. Designing Link Functions
 - [3-Step Process for Designing Link Functions](GLM_NOTES.md#a-3-step-process-for-designing-a-link-function)
