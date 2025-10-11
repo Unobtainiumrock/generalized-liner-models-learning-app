@@ -1,23 +1,19 @@
-import { useState } from 'react';
 import { BlockMath, InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
-import { ControlPanel } from '../controls/ControlPanel';
-import { TwoSpacesVisualization } from '../charts/TwoSpacesVisualization';
-import { DistributionVisualizer } from '../charts/DistributionVisualizer';
-import { LinearPredictorPlot } from '../charts/LinearPredictorPlot';
-import { LinkFunctionPlot } from '../charts/LinkFunctionPlot';
-import { DomainTransformationPlot } from '../charts/DomainTransformationPlot';
-import { ExponentialFamilyPlot } from '../charts/ExponentialFamilyPlot';
-import { GLMTableInteractive } from '../charts/GLMTableInteractive';
-import { MatrixVisualization } from '../charts/MatrixVisualization';
-import { WeightMatrixPlot } from '../charts/WeightMatrixPlot';
-import { ChatAssistant } from '../ui/ChatAssistant';
-import { Blog } from '../blogs/Blog';
-import { Paragraph } from '../blogs/Paragraph';
-import { useAppStore } from '../../store/appStore';
+import { DistributionVisualizer } from '@/components/charts/DistributionVisualizer';
+import { LinearPredictorPlot } from '@/components/charts/LinearPredictorPlot';
+import { LinkFunctionPlot } from '@/components/charts/LinkFunctionPlot';
+import { DomainTransformationPlot } from '@/components/charts/DomainTransformationPlot';
+import { ExponentialFamilyPlot } from '@/components/charts/ExponentialFamilyPlot';
+import { GLMTableInteractive } from '@/components/charts/GLMTableInteractive';
+import { MatrixVisualization } from '@/components/charts/MatrixVisualization';
+import { WeightMatrixPlot } from '@/components/charts/WeightMatrixPlot';
+import { ChatAssistant } from '@/components/ui/ChatAssistant';
+import { Blog } from '@/components/blogs/Blog';
+import { Paragraph } from '@/components/blogs/Paragraph';
+import { useAppStore } from '@/store/appStore';
 
 export const MainLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const { error, clearError, isLoading } = useAppStore();
 
   return (
@@ -44,11 +40,6 @@ export const MainLayout = () => {
         </div>
       )}
 
-      {/* Control Panel */}
-      <div className={`${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 overflow-hidden bg-white border-r border-gray-200`}>
-        < ControlPanel />
-      </div>
-
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
@@ -58,25 +49,15 @@ export const MainLayout = () => {
               <h1 className="text-5xl font-bold text-gray-900">GLM Learning Sandbox</h1>
               <p className="text-m text-gray-600">Interactive Generalized Linear Models</p>
             </div>
-            <div className="flex items-center space-x-4">
-              {isLoading && (
-                <div className="flex items-center text-gray-500">
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Processing...
-                </div>
-              )}
-              <button
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            {isLoading && (
+              <div className="flex items-center text-gray-500">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-              </button>
-            </div>
+                Processing...
+              </div>
+            )}
           </div>
         </header>
 
@@ -111,9 +92,9 @@ export const MainLayout = () => {
               </Paragraph>
 
               <Paragraph className="text-lg text-black leading-relaxed">
-                Just as we mentioned about Generalized Linear Model(GLM) is a model that is used for the exponential family of distributions.
-                We should first start with a basic model to gain an understanding on Linear Regression.
-                <br />
+                Generalized Linear Model(GLM) is a model that is used for the exponential family of distributions.
+                But before we actaully get into a GLM, we should first start with a basic model to gain an understanding
+                on Linear Regression.<br />
               </Paragraph>
 
               <Paragraph className="text-lg text-black leading-relaxed">
@@ -815,10 +796,6 @@ export const MainLayout = () => {
               </div>
 
             </Blog>
-
-            <div className="mt-6">
-              <TwoSpacesVisualization />
-            </div>
           </div>
         </main>
       </div>
@@ -827,4 +804,4 @@ export const MainLayout = () => {
       <ChatAssistant />
     </div>
   );
-};
+}; 
