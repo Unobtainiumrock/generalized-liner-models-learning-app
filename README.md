@@ -80,16 +80,10 @@ glm-sandbox/
 ## Documentation
 
 - **[GLM Notes](docs/GLM_NOTES.md)**: Comprehensive mathematical documentation covering GLM theory from exponential families to IRLS
-- **[Template Guide](docs/TEMPLATE.md)**: Quick navigation to key GLM concepts
+- **[Study Guide](docs/STUDY_GUIDE.md)**: Quick navigation to key GLM concepts with recommended reading order
 - **[TODO](docs/TODO.md)**: Project roadmap and pending tasks
-- **[Integration Status](docs/INTEGRATION_STATUS.md)**: Current integration and feature status
 - **[Contributing](docs/CONTRIBUTING.md)**: Guidelines for contributors
-- **[Development Setup](docs/DEVELOPMENT_SETUP.md)**: Development environment setup
 - **[Git Workflow](docs/GIT_WORKFLOW.md)**: Git workflow and branching strategy
-
-## License
-
-This project is part of an educational initiative for learning statistical modeling.
 
 ## Authors
 
