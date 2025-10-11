@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
 import { ControlPanel } from '../controls/ControlPanel';
 import { TwoSpacesVisualization } from '../charts/TwoSpacesVisualization';
 import { ChatAssistant } from '../ui/ChatAssistant';
 import { Blog } from '../blogs/Blog';
+import { Paragraph } from '../blogs/Paragraph';
 import { useAppStore } from '../../store/appStore';
 
 export const MainLayout = () => {
@@ -72,7 +75,103 @@ export const MainLayout = () => {
         {/* Main area: Blog above the visualization, centered with spacing and scroll when needed */}
         <main className="flex-1 p-6 overflow-auto">
           <div className="max-w-4xl mx-auto">
-            <Blog />
+            <Blog>
+              <Paragraph as="h1" className="font-semibold text-3xl text-gray-900 mb-3">
+                1. Introduction: Basics Linear Regression
+              </Paragraph>
+
+              <Paragraph className="text-lg text-black leading-relaxed">
+                Generalized Linear Model(GLM) is a model that is use for the exponetial family of distributions.
+                But before we actaully get into a GLM, we should first start with a basic model to gain an understanding
+                on Linear Regression.<br />
+              </Paragraph>
+
+              <Paragraph className="text-lg text-black leading-relaxed">
+                In Linear Regression, we first start off with the foundation of Ordinary Least Squares.
+                OLS is the most common way to estimate a model,it find the best fit line by minimizing squared
+                errors. We can apply this OLS on a Simple Linear Regression model. A SLR is a model that has a relationship
+                with one predictor(independent variable) <InlineMath math={`X_i`} />  and one response(dependent variable)
+                <InlineMath math={`Y_i`} />. Petty much <InlineMath math={`Y_i`} /> is the outcome and  <InlineMath math={`X_i`} />  affects that outcome.
+                This the formula is below:
+              </Paragraph>
+
+              <div className="text-2xl text-black">
+                <BlockMath
+                  math={`Y_i = \\beta_0 + \\beta_1 X_i + \\varepsilon_i,\\quad i = 1,\\ldots,n`} />
+              </div>
+
+              <ul className="list-disc pl-6 text-lg text-black leading-relaxed space-y-2">
+                <li>
+                  <InlineMath math="\beta_0" />: intercept
+                </li>
+                <li>
+                  <InlineMath math="\beta_1" />: slope (effect of <InlineMath math="X" /> on <InlineMath math="Y" />)
+                </li>
+                <li>
+                  <InlineMath math="\varepsilon_i" />: random error with mean 0 and variance <InlineMath math="\sigma^2" />
+                </li>
+              </ul>
+              <br />
+              <Paragraph className="text-lg text-black leading-relaxed">
+                This is very good step into learning what a model is. It can predict very simple cases, like getting student grades from study hours.
+                While SLR just gets one preditor, we can also extend OLS to handle multiple predictors.
+              </Paragraph>
+              <br />
+
+              <Paragraph className="text-lg text-black leading-relaxed">
+                We just learned about SLR, but we can also apply OLS to Multiple Linear Regression. In MLR, we can allow multiple predictors,
+                this can help us out in more complex prombelms and gather more predictors. The outcome of <InlineMath math={`Y_{i}`} /> can be depends on multiple <InlineMath math={`X_{ij}`} />.
+                OLS in MLR minimizes as sum of squared residuals.
+              </Paragraph>
+   
+
+              <div className="text-2xl text-black">
+                <BlockMath math={`Y_i = \\beta_0 + \\beta_1 X_{i1} + \\beta_2 X_{i2} + \\cdots + \\beta_p X_{ip} + \\varepsilon_i,\\quad i = 1,\\ldots,n`} />
+              </div>
+
+              <ul className="list-disc pl-6 text-lg text-black leading-relaxed space-y-2">
+                <li>
+                  <InlineMath math="Y_i" />: response variable (outcome)
+                </li>
+                <li>
+                  <InlineMath math="X_{ij}" />: predictor <InlineMath math="j" /> for observation <InlineMath math="i" />
+                </li>
+                <li>
+                  <InlineMath math="\beta_j" />: coefficients to estimate
+                </li>
+                <li>
+                  <InlineMath math="\varepsilon" />: error term
+                </li>
+              </ul>
+              <br />
+
+              <Paragraph className="text-lg text-black leading-relaxed">
+                This is the same form as the above but in matrix form. <InlineMath math="y" > 
+                </InlineMath> is the column the outcomes. <InlineMath math="X" ></InlineMath> is like a row of a data point
+                <InlineMath math="B" ></InlineMath> tell us how important is <InlineMath math="X" ></InlineMath>. Errors{' '}<InlineMath math="\varepsilon " /> {' '}
+                are the stuff that can't be explain by the model.
+
+              </Paragraph>
+
+              <div className="text-2xl text-black">
+                <BlockMath math={`y = X\\beta + \\varepsilon`} />
+              </div>
+
+              <ul className="list-disc pl-6 text-lg text-black leading-relaxed space-y-2">
+                  <li>
+                    <InlineMath math="y" />:  <InlineMath math="n \times 1" /> vector of responses
+                  </li>
+                  <li>
+                    <InlineMath math="X" />: <InlineMath math="n \times (p+1)" /> design matrix (first column = 1's for intercept)
+                  </li>
+                  <li>
+                    <InlineMath math="\beta" />: <InlineMath math="(p+1) \times 1" /> vector of coefficients design matrix (first column = 1's for intercept)
+                  </li>
+                  <li>
+                    <InlineMath math="\varepsilon" />: error vector
+                  </li>
+                </ul>
+            </Blog>
 
             <div className="mt-6">
               <TwoSpacesVisualization />
