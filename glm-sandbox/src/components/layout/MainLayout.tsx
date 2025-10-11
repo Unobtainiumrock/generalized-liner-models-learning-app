@@ -1,17 +1,17 @@
 import { BlockMath, InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
-import { DistributionVisualizer } from '../charts/DistributionVisualizer';
-import { LinearPredictorPlot } from '../charts/LinearPredictorPlot';
-import { LinkFunctionPlot } from '../charts/LinkFunctionPlot';
-import { DomainTransformationPlot } from '../charts/DomainTransformationPlot';
-import { ExponentialFamilyPlot } from '../charts/ExponentialFamilyPlot';
-import { GLMTableInteractive } from '../charts/GLMTableInteractive';
-import { MatrixVisualization } from '../charts/MatrixVisualization';
-import { WeightMatrixPlot } from '../charts/WeightMatrixPlot';
-import { ChatAssistant } from '../ui/ChatAssistant';
-import { Blog } from '../blogs/Blog';
-import { Paragraph } from '../blogs/Paragraph';
-import { useAppStore } from '../../store/appStore';
+import { DistributionVisualizer } from '@/components/charts/DistributionVisualizer';
+import { LinearPredictorPlot } from '@/components/charts/LinearPredictorPlot';
+import { LinkFunctionPlot } from '@/components/charts/LinkFunctionPlot';
+import { DomainTransformationPlot } from '@/components/charts/DomainTransformationPlot';
+import { ExponentialFamilyPlot } from '@/components/charts/ExponentialFamilyPlot';
+import { GLMTableInteractive } from '@/components/charts/GLMTableInteractive';
+import { MatrixVisualization } from '@/components/charts/MatrixVisualization';
+import { WeightMatrixPlot } from '@/components/charts/WeightMatrixPlot';
+import { ChatAssistant } from '@/components/ui/ChatAssistant';
+import { Blog } from '@/components/blogs/Blog';
+import { Paragraph } from '@/components/blogs/Paragraph';
+import { useAppStore } from '@/store/appStore';
 
 export const MainLayout = () => {
   const { error, clearError, isLoading } = useAppStore();
@@ -183,6 +183,16 @@ export const MainLayout = () => {
                   </li>
                 </ul>
 
+                <Paragraph className="text-lg text-black leading-relaxed">
+                <br/>
+
+                MLR give us a very flexible model that is able to have multiple predictors.But it still assumes the response is continuous and can take any value. 
+                When the outcome is a probability those assumptions break and the fitted values go outside their range. 
+                This is where Generalized Linear Models come in to play, they keep the linear predictor you built for MLR but they add two more things.
+                A distribution from the exponential family that give the response and a link function 
+                that connects it back to the linear predictor. 
+                </Paragraph>
+                
               <Paragraph as="h2" className="font-semibold text-2xl text-gray-900 mb-3 mt-8">
                 3. The Random Component (<InlineMath math="\mathcal{D}" />)
               </Paragraph>
@@ -794,4 +804,4 @@ export const MainLayout = () => {
       <ChatAssistant />
     </div>
   );
-};
+}; 
