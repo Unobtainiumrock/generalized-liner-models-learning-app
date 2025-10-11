@@ -137,12 +137,16 @@ export const MatrixVisualization = React.memo((_props: MatrixVisualizationProps)
                   onMouseLeave={() => setHighlightRow(null)}
                   className={`${highlightRow === i ? 'bg-indigo-100' : 'hover:bg-gray-50'} transition-colors cursor-pointer`}
                 >
-                  <td className="px-2 py-1 border border-gray-300 text-xs text-center font-semibold">{i + 1}</td>
+                  <td className={`px-2 py-1 border border-gray-300 text-xs text-center font-semibold ${
+                    highlightRow === i ? 'bg-indigo-100' : ''
+                  }`}>{i + 1}</td>
                   {row.slice(0, p + 1).map((val, j) => (
                     <td
                       key={j}
                       className={`px-2 py-1 border border-gray-300 text-xs text-center font-mono ${
-                        j === 0 ? 'bg-yellow-50' : 'bg-blue-50'
+                        highlightRow === i 
+                          ? 'bg-indigo-100' 
+                          : j === 0 ? 'bg-yellow-50' : 'bg-blue-50'
                       }`}
                     >
                       {val.toFixed(1)}
@@ -150,11 +154,15 @@ export const MatrixVisualization = React.memo((_props: MatrixVisualizationProps)
                   ))}
                   {showMultiplication && (
                     <>
-                      <td className="px-2 py-1 border-l-4 border-indigo-500 text-xs text-center">×</td>
+                      <td className={`px-2 py-1 border-l-4 border-indigo-500 text-xs text-center ${
+                        highlightRow === i ? 'bg-indigo-100' : ''
+                      }`}>×</td>
                       {i === 0 ? (
                         <>
                           {beta.slice(0, p + 1).map((val, j) => (
-                            <td key={j} className="px-2 py-1 border border-gray-300 text-xs text-center font-mono bg-green-50">
+                            <td key={j} className={`px-2 py-1 border border-gray-300 text-xs text-center font-mono ${
+                              highlightRow === i ? 'bg-indigo-100' : 'bg-green-50'
+                            }`}>
                               {val.toFixed(1)}
                             </td>
                           ))}
@@ -162,14 +170,20 @@ export const MatrixVisualization = React.memo((_props: MatrixVisualizationProps)
                       ) : (
                         <>
                           {beta.slice(0, p + 1).map((_, j) => (
-                            <td key={j} className="px-2 py-1 border border-gray-300 text-xs text-center text-gray-400">
+                            <td key={j} className={`px-2 py-1 border border-gray-300 text-xs text-center text-gray-400 ${
+                              highlightRow === i ? 'bg-indigo-100' : ''
+                            }`}>
                               ↑
                             </td>
                           ))}
                         </>
                       )}
-                      <td className="px-2 py-1 text-xs text-center">=</td>
-                      <td className="px-2 py-1 border border-gray-300 text-xs text-center font-mono font-semibold bg-purple-50">
+                      <td className={`px-2 py-1 text-xs text-center ${
+                        highlightRow === i ? 'bg-indigo-100' : ''
+                      }`}>=</td>
+                      <td className={`px-2 py-1 border border-gray-300 text-xs text-center font-mono font-semibold ${
+                        highlightRow === i ? 'bg-indigo-100' : 'bg-purple-50'
+                      }`}>
                         {eta[i].toFixed(2)}
                       </td>
                     </>
