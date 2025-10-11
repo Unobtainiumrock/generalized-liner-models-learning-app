@@ -111,9 +111,9 @@ export const MainLayout = () => {
               </Paragraph>
 
               <Paragraph className="text-lg text-black leading-relaxed">
-                Generalized Linear Model(GLM) is a model that is used for the exponential family of distributions.
-                But before we actaully get into a GLM, we should first start with a basic model to gain an understanding
-                on Linear Regression.<br />
+                Just as we mentioned about Generalized Linear Model(GLM) is a model that is used for the exponential family of distributions.
+                We should first start with a basic model to gain an understanding on Linear Regression.
+                <br />
               </Paragraph>
 
               <Paragraph className="text-lg text-black leading-relaxed">
@@ -202,6 +202,16 @@ export const MainLayout = () => {
                   </li>
                 </ul>
 
+                <Paragraph className="text-lg text-black leading-relaxed">
+                <br/>
+
+                MLR give us a very flexible model that is able to have multiple predictors.But it still assumes the response is continuous and can take any value. 
+                When the outcome is a probability those assumptions break and the fitted values go outside their range. 
+                This is where Generalized Linear Models come in to play, they keep the linear predictor you built for MLR but they add two more things.
+                A distribution from the exponential family that give the response and a link function 
+                that connects it back to the linear predictor. 
+                </Paragraph>
+                
               <Paragraph as="h2" className="font-semibold text-2xl text-gray-900 mb-3 mt-8">
                 3. The Random Component (<InlineMath math="\mathcal{D}" />)
               </Paragraph>
