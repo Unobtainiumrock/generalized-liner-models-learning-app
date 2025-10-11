@@ -91,11 +91,19 @@ Take the testing with a grain of salt, I didn't thoroughly work with that part. 
 
 ### Theoretical Extensions
 
-The project currently focuses on canonical link functions, but the world of non-canonical link functions offers a fascinating playground for exploration. While we touched on alternatives like Probit and Complementary log-log, we didn't fully integrate the optimization theory that explains why canonical links guarantee unique solutions. The key lies in the Hessian matrix (the matrix of second derivatives of the log-likelihood function): canonical link functions ensure this matrix is negative definite, guaranteeing both invertibility and a unique global maximum. Non-canonical link functions lack this guarantee, potentially leading to non-invertible Hessian matrices or multiple local maxima. Exploring this connection would provide a complete theoretical foundation linking the exponential family structure to the optimization landscape, revealing the beautiful interplay between probability theory and numerical analysis.
+The project currently focuses on canonical link functions, but the world of non-canonical link functions offers a fascinating playground for exploration. 
+
+While we touched on alternatives like Probit and Complementary log-log, we didn't fully integrate the optimization theory that explains why canonical links guarantee unique solutions. 
+
+The key lies in the Hessian matrix (the matrix of second derivatives of the log-likelihood function): canonical link functions ensure this matrix is negative definite, guaranteeing both invertibility and a unique global maximum. 
+
+Non-canonical link functions lack this guarantee, potentially leading to non-invertible Hessian matrices or multiple local maxima. 
+
+Exploring this connection would provide a complete theoretical foundation linking the exponential family structure to the optimization landscape, revealing the beautiful interplay between probability theory and numerical analysis.
 
 ### Practical Development
 
-Several enhancements could improve the application's functionality and educational value:
+Several enhancements could improve the application's functionality and educational value. Below are a few key areas we really wish we had more time to get around to implementing.
 
 - **Interactive AI Agent Integration**: Develop context-aware endpoints that provide detailed application documentation through the chat interface, enabling both human users and AI agents to navigate features programmatically. This could leverage protocols like MCP (Model Context Protocol) or A2A (Agent-to-Agent) for agentic browser interactions.
 
@@ -107,8 +115,13 @@ Several enhancements could improve the application's functionality and education
 
 ## Authors
 
-- Created as a final project for statistical modeling coursework
-- Interactive visualizations and web implementation by the development team
+This project was created as a final project for statistical modeling coursework.
+
+### Contributors
+
+- **[Nicholas Fleischhauer](https://www.linkedin.com/in/unobtainiumrock)** - Project Lead & Core Development
+- **[Boston Bautista](https://www.linkedin.com/in/boston101)** - Development & Implementation
+- **Ernesto Diaz** - Development & Implementation
 
 ## References
 
