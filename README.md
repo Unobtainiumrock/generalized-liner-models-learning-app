@@ -2,6 +2,8 @@
 
 An interactive web application for learning and visualizing Generalized Linear Models (GLMs).
 
+🚀 **[Live Demo](https://glm-learning.netlify.app)** 🚀
+
 ## Overview
 
 This project provides an interactive sandbox for understanding the mathematical foundations and practical applications of Generalized Linear Models. It features real-time visualizations, interactive controls, and comprehensive educational content covering everything from basic linear regression to advanced matrix formulations and iteratively reweighted least squares.
@@ -83,9 +85,12 @@ Take the testing with a grain of salt, I didn't thoroughly work with that part. 
 
 - **[GLM Notes](docs/GLM_NOTES.md)**: Comprehensive mathematical documentation covering GLM theory from exponential families to IRLS
 - **[Study Guide](docs/STUDY_GUIDE.md)**: Quick navigation to key GLM concepts with recommended reading order
-- **[TODO](docs/TODO.md)**: Project roadmap and pending tasks
 - **[Contributing](docs/CONTRIBUTING.md)**: Guidelines for contributors
 - **[Git Workflow](docs/GIT_WORKFLOW.md)**: Git workflow and branching strategy
+
+## Implementation Notes
+
+During development, we pivoted from the original implementation approach outlined in early project planning documents. The current architecture focuses on a streamlined, blog-integrated educational experience rather than the initially proposed dual-world perspective with separate control panels. As a result, some code artifacts from earlier iterations may remain in the codebase but are not actively used. Future work should include a comprehensive code audit to identify and remove these unused components, ensuring the codebase remains clean and maintainable.
 
 ## Future Directions
 
