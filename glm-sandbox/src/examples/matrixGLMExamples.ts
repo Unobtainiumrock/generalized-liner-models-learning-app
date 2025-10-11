@@ -11,8 +11,8 @@
  * 4. Parameter estimation using matrix operations
  */
 
-import { matrixGLMCalculations } from '../lib/glm';
-import { MatrixGLMParameters, MatrixGLMConfig, MatrixDataPoint } from '../types';
+import { matrixGLMCalculations } from '@/lib/glm';
+import { MatrixGLMParameters, MatrixGLMConfig, MatrixDataPoint } from '@/types';
 
 // Example 1: Simple Linear Regression (2 predictors)
 export function example1_LinearRegression() {

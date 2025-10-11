@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
-import { useAppStore } from '../../store/appStore';
-import { useGLM } from '../../hooks/useGLM';
-import { GLMError } from '../../types';
+import { useAppStore } from '@/store/appStore';
+import { useGLM } from '@/hooks/useGLM';
+import { GLMError } from '@/types';
 
 interface ResponseSpacePlotProps {
   width?: number;

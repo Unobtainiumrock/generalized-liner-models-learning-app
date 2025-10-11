@@ -1,17 +1,17 @@
 import { BlockMath, InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
-import { DistributionVisualizer } from '../charts/DistributionVisualizer';
-import { LinearPredictorPlot } from '../charts/LinearPredictorPlot';
-import { LinkFunctionPlot } from '../charts/LinkFunctionPlot';
-import { DomainTransformationPlot } from '../charts/DomainTransformationPlot';
-import { ExponentialFamilyPlot } from '../charts/ExponentialFamilyPlot';
-import { GLMTableInteractive } from '../charts/GLMTableInteractive';
-import { MatrixVisualization } from '../charts/MatrixVisualization';
-import { WeightMatrixPlot } from '../charts/WeightMatrixPlot';
-import { ChatAssistant } from '../ui/ChatAssistant';
-import { Blog } from '../blogs/Blog';
-import { Paragraph } from '../blogs/Paragraph';
-import { useAppStore } from '../../store/appStore';
+import { DistributionVisualizer } from '@/components/charts/DistributionVisualizer';
+import { LinearPredictorPlot } from '@/components/charts/LinearPredictorPlot';
+import { LinkFunctionPlot } from '@/components/charts/LinkFunctionPlot';
+import { DomainTransformationPlot } from '@/components/charts/DomainTransformationPlot';
+import { ExponentialFamilyPlot } from '@/components/charts/ExponentialFamilyPlot';
+import { GLMTableInteractive } from '@/components/charts/GLMTableInteractive';
+import { MatrixVisualization } from '@/components/charts/MatrixVisualization';
+import { WeightMatrixPlot } from '@/components/charts/WeightMatrixPlot';
+import { ChatAssistant } from '@/components/ui/ChatAssistant';
+import { Blog } from '@/components/blogs/Blog';
+import { Paragraph } from '@/components/blogs/Paragraph';
+import { useAppStore } from '@/store/appStore';
 
 export const MainLayout = () => {
   const { error, clearError, isLoading } = useAppStore();
@@ -61,9 +61,8 @@ export const MainLayout = () => {
           </div>
         </header>
 
-        {/* Main area: Blog above the visualization, centered with spacing and scroll when needed */}
-        <main className="flex-1 p-6 overflow-auto">
-          <div className="max-w-4xl mx-auto">
+        <main className="flex-1 overflow-auto">
+          <div className="max-w-4xl mx-auto p-6 pb-12">
             <Blog>
               <Paragraph as="h1" className="font-semibold text-3xl text-gray-900 mb-3">
                 1. The Motivation: Why We Need GLMs

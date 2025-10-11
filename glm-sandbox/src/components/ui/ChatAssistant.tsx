@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
-import { useAppStore } from '../../store/appStore';
-import { config } from '../../config/env';
+import { useAppStore } from '@/store/appStore';
+import { config } from '@/config/env';
 
 export const ChatAssistant = () => {
   const { isChatOpen, setChatOpen, chatHistory, addChatMessage } = useAppStore();
