@@ -7,13 +7,13 @@ describe('GLM Calculations', () => {
     it('should calculate linear predictor correctly', () => {
       const params: GLMParameters = { intercept: 2, slope: 1.5 }
       const result = glmCalculations.linearPredictor(3, params)
-      expect(result).toBe(2 + 1.5 * 3) // 6.5
+      expect(result).toBe(2 + 1.5 * 3)
     })
 
     it('should handle negative values', () => {
       const params: GLMParameters = { intercept: -1, slope: 0.5 }
       const result = glmCalculations.linearPredictor(-2, params)
-      expect(result).toBe(-1 + 0.5 * -2) // -2
+      expect(result).toBe(-1 + 0.5 * -2)
     })
   })
 
@@ -22,21 +22,21 @@ describe('GLM Calculations', () => {
       const params: GLMParameters = { intercept: 1, slope: 2 }
       const config: GLMConfig = { distribution: 'normal', linkFunction: 'identity' }
       const result = glmCalculations.meanResponse(3, params, config)
-      expect(result).toBe(1 + 2 * 3) // 7
+      expect(result).toBe(1 + 2 * 3)
     })
 
     it('should calculate log link correctly', () => {
       const params: GLMParameters = { intercept: 0, slope: 1 }
       const config: GLMConfig = { distribution: 'poisson', linkFunction: 'log' }
       const result = glmCalculations.meanResponse(2, params, config)
-      expect(result).toBe(Math.exp(0 + 1 * 2)) // e^2
+      expect(result).toBe(Math.exp(0 + 1 * 2))
     })
 
     it('should calculate logit link correctly', () => {
       const params: GLMParameters = { intercept: 0, slope: 1 }
       const config: GLMConfig = { distribution: 'bernoulli', linkFunction: 'logit' }
       const result = glmCalculations.meanResponse(0, params, config)
-      expect(result).toBe(1 / (1 + Math.exp(-0))) // 0.5
+      expect(result).toBe(1 / (1 + Math.exp(-0)))
     })
   })
 
@@ -53,7 +53,6 @@ describe('GLM Calculations', () => {
       const config: GLMConfig = { distribution: 'normal', linkFunction: 'identity' }
       const data = glmCalculations.generateData(params, config, 1000)
       
-      // Check that x values are within [-5, 5]
       data.forEach(point => {
         expect(point.x).toBeGreaterThanOrEqual(-5)
         expect(point.x).toBeLessThanOrEqual(5)

@@ -110,7 +110,6 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
 
   return (
     <div className="w-full border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-      {/* Distribution selector */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Select Distribution
@@ -128,7 +127,6 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
         </select>
       </div>
 
-      {/* Original Form */}
       <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
         <h4 className="text-sm font-semibold text-gray-800 mb-2">Original Form</h4>
         <div className="text-center">
@@ -136,7 +134,6 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
         </div>
       </div>
 
-      {/* Exponential Family Form */}
       <div className="mb-6 p-4 bg-purple-50 rounded-lg border border-purple-200">
         <h4 className="text-sm font-semibold text-gray-800 mb-2">Exponential Family Form</h4>
         <div className="text-center mb-3">
@@ -147,9 +144,7 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
         </div>
       </div>
 
-      {/* Components Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {/* Natural Parameter */}
         <div className="p-4 bg-green-50 rounded-lg border border-green-200">
           <h4 className="text-sm font-semibold text-gray-800 mb-2 flex items-center">
             <span className="inline-block w-3 h-3 bg-green-500 rounded-full mr-2"></span>
@@ -161,7 +156,6 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
           <p className="text-xs text-gray-600 text-center">{info.naturalParamDescription}</p>
         </div>
 
-        {/* b(θ) Function */}
         <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
           <h4 className="text-sm font-semibold text-gray-800 mb-2">b(θ) Function</h4>
           <div className="text-center">
@@ -169,7 +163,6 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
           </div>
         </div>
 
-        {/* a(φ) Function */}
         <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
           <h4 className="text-sm font-semibold text-gray-800 mb-2">a(φ) Dispersion</h4>
           <div className="text-center">
@@ -177,7 +170,6 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
           </div>
         </div>
 
-        {/* c(y,φ) Function */}
         <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
           <h4 className="text-sm font-semibold text-gray-800 mb-2">c(y,φ) Normalization</h4>
           <div className="text-center">
@@ -186,7 +178,6 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
         </div>
       </div>
 
-      {/* Mean-Parameter Relationship */}
       <div className="mb-6 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
         <h4 className="text-sm font-semibold text-gray-800 mb-2">Mean-Parameter Relationship</h4>
         <div className="text-center">
@@ -197,7 +188,6 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
         </p>
       </div>
 
-      {/* Canonical Link */}
       <div className="mb-6 p-4 bg-teal-50 rounded-lg border border-teal-200">
         <h4 className="text-sm font-semibold text-gray-800 mb-2">Canonical Link Function</h4>
         <div className="text-center">
@@ -208,7 +198,6 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
         </p>
       </div>
 
-      {/* Derivation Toggle */}
       <div className="mb-4">
         <button
           onClick={() => setShowDerivation(!showDerivation)}
@@ -228,7 +217,6 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
         </button>
       </div>
 
-      {/* Derivation Steps */}
       {showDerivation && (
         <div className="p-4 bg-gray-50 rounded-lg border border-gray-300">
           <h4 className="text-sm font-semibold text-gray-800 mb-3">Derivation Steps</h4>
@@ -242,7 +230,6 @@ export const ExponentialFamilyPlot = React.memo((_props: ExponentialFamilyPlotPr
         </div>
       )}
 
-      {/* Key Insight */}
       <div className="mt-6 p-4 bg-blue-100 rounded-lg border-l-4 border-blue-500">
         <p className="text-sm text-gray-800">
           <strong>Key Insight:</strong> The canonical link function <InlineMath math="g(\mu)" /> directly maps 

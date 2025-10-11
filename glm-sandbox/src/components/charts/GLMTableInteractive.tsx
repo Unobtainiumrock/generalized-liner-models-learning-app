@@ -125,7 +125,6 @@ export const GLMTableInteractive = React.memo((_props: GLMTableInteractiveProps)
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Complete GLM Framework Table</h3>
         
-        {/* Filters */}
         <div className="flex flex-wrap gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -159,7 +158,6 @@ export const GLMTableInteractive = React.memo((_props: GLMTableInteractiveProps)
           </div>
         </div>
 
-        {/* Legend */}
         <div className="flex items-center gap-4 text-sm mb-4">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
@@ -172,7 +170,6 @@ export const GLMTableInteractive = React.memo((_props: GLMTableInteractiveProps)
         </div>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-300">
           <thead className="bg-gray-50">
@@ -224,7 +221,6 @@ export const GLMTableInteractive = React.memo((_props: GLMTableInteractiveProps)
         </table>
       </div>
 
-      {/* Details Panel */}
       {selectedRow !== null && (
         <div className="mt-6 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border border-indigo-200">
           <h4 className="text-md font-semibold text-gray-900 mb-3">
@@ -271,7 +267,6 @@ export const GLMTableInteractive = React.memo((_props: GLMTableInteractiveProps)
         </div>
       )}
 
-      {/* Summary Statistics */}
       <div className="mt-6 p-4 bg-gray-50 rounded-lg">
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>

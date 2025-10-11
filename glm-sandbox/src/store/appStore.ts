@@ -3,12 +3,10 @@ import { persist } from 'zustand/middleware';
 import { GLMState, GLMParameters, GLMConfig, DataPoint, ChatMessage, GLMError, ValidationResult } from '../types';
 
 interface AppStore extends GLMState {
-  // Error and loading states
   error: GLMError | null;
   isLoading: boolean;
   isAutoFitting: boolean;
   
-  // Actions
   setTruthParams: (params: Partial<GLMParameters>) => ValidationResult;
   setTruthConfig: (config: Partial<GLMConfig>) => ValidationResult;
   setEstimatedParams: (params: Partial<GLMParameters>) => ValidationResult;
@@ -25,7 +23,6 @@ interface AppStore extends GLMState {
   clearError: () => void;
 }
 
-// Validation functions
 const validateParameters = (params: Partial<GLMParameters>): ValidationResult => {
   const errors: string[] = [];
   
@@ -63,7 +60,7 @@ const validateSampleSize = (size: number): ValidationResult => {
 const defaultState: GLMState = {
   truthParams: { intercept: 0, slope: 1 },
   truthConfig: { distribution: 'normal', linkFunction: 'identity' },
-  estimatedParams: { intercept: 0.5, slope: 0.8 }, // Different from truth to make blue line visible
+  estimatedParams: { intercept: 0.5, slope: 0.8 },
   dataPoints: [],
   sampleSize: 100,
   mode: 'truth',

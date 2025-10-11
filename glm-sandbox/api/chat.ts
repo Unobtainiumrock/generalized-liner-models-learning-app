@@ -49,8 +49,8 @@ export const handler: Handler = async (event) => {
       };
     }
 
-    // In a real implementation, you would call the Gemini API here
-    // For now, we'll provide a simple response based on keywords
+
+
     let reply = '';
 
     if (message.toLowerCase().includes('logit')) {

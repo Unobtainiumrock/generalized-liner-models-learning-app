@@ -3,20 +3,19 @@ export interface GLMParameters {
   slope: number;
 }
 
-// Matrix-based GLM interfaces for higher dimensional cases
 export interface MatrixGLMParameters {
-  beta: number[]; // [β₀, β₁, β₂, ..., βₚ] - includes intercept as first element
+  beta: number[];
 }
 
 export interface MatrixDataPoint {
-  x: number[]; // [x₁, x₂, ..., xₚ] - predictor values
-  y: number;   // response value
+  x: number[];
+  y: number;
 }
 
 export interface MatrixGLMConfig {
   distribution: 'normal' | 'poisson' | 'bernoulli' | 'gamma' | 'negativeBinomial' | 'binomial';
   linkFunction: 'identity' | 'log' | 'logit' | 'inverse' | 'probit' | 'cloglog';
-  numPredictors: number; // number of predictors (excluding intercept)
+  numPredictors: number;
 }
 
 export interface GLMConfig {
@@ -30,22 +29,17 @@ export interface DataPoint {
 }
 
 export interface GLMState {
-  // Truth mode parameters
   truthParams: GLMParameters;
   truthConfig: GLMConfig;
   
-  // Estimation mode parameters
   estimatedParams: GLMParameters;
   
-  // Generated data
   dataPoints: DataPoint[];
   sampleSize: number;
   
-  // UI state
   mode: 'truth' | 'estimation';
   isGeneratingData: boolean;
   
-  // Chat state
   chatHistory: ChatMessage[];
   isChatOpen: boolean;
 }
@@ -57,14 +51,12 @@ export interface ChatMessage {
   timestamp: Date;
 }
 
-// Error handling types
 export interface GLMError {
   code: 'INVALID_PARAMETERS' | 'ESTIMATION_FAILED' | 'DATA_GENERATION_FAILED' | 'API_ERROR';
   message: string;
   details?: unknown;
 }
 
-// API response types
 export interface ChatApiResponse {
   reply: string;
   error?: string;
@@ -80,17 +72,14 @@ export interface ChatApiRequest {
   };
 }
 
-// Validation types
 export interface ValidationResult {
   isValid: boolean;
   errors: string[];
 }
 
-// D3 selection types
 export type D3Selection = d3.Selection<SVGSVGElement, unknown, null, undefined>;
 export type D3Scale = d3.ScaleLinear<number, number>;
 
-// Enhanced GLM state with error handling
 export interface GLMStateWithErrors extends GLMState {
   error: GLMError | null;
   isLoading: boolean;
@@ -103,13 +92,11 @@ export interface GLMCalculations {
   estimateParameters: (data: DataPoint[], config: GLMConfig) => GLMParameters;
 }
 
-// Matrix-based GLM calculations
 export interface MatrixGLMCalculations {
   linearPredictor: (x: number[], params: MatrixGLMParameters) => number;
   meanResponse: (x: number[], params: MatrixGLMParameters, config: MatrixGLMConfig) => number;
   generateData: (params: MatrixGLMParameters, config: MatrixGLMConfig, sampleSize: number) => MatrixDataPoint[];
   estimateParameters: (data: MatrixDataPoint[], config: MatrixGLMConfig) => MatrixGLMParameters;
-  // Matrix operations
   createDesignMatrix: (data: MatrixDataPoint[]) => number[][];
   matrixMultiply: (A: number[][], B: number[]) => number[];
   matrixTranspose: (A: number[][]) => number[][];

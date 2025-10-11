@@ -7,24 +7,17 @@ interface LinearPredictorPlotProps {
   height?: number;
 }
 
-/**
- * Visualizes the linear predictor η = β₀ + β₁x₁ + β₂x₂ + ... + βₚxₚ
- * Shows how coefficients affect the linear combination
- */
 export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: LinearPredictorPlotProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [error, setError] = useState<GLMError | null>(null);
   
-  // State for coefficients (β₀, β₁, β₂)
   const [beta0, setBeta0] = useState<number>(0);
   const [beta1, setBeta1] = useState<number>(1);
   const [beta2, setBeta2] = useState<number>(0);
   
-  // Fixed x values for demonstration
   const [x1Value, setX1Value] = useState<number>(2);
   const [x2Value, setX2Value] = useState<number>(1);
 
-  // Calculate linear predictor for a range of x1 values (keeping x2 fixed)
   const plotData = useMemo(() => {
     const data: { x: number; y: number }[] = [];
     for (let x = -5; x <= 5; x += 0.1) {
@@ -34,7 +27,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
     return data;
   }, [beta0, beta1, beta2, x2Value]);
 
-  // Calculate components at specific x1 value
   const componentBreakdown = useMemo(() => {
     return {
       intercept: beta0,
@@ -66,7 +58,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
         .domain([yMin, yMax])
         .range([height - margin.bottom, margin.top]);
 
-      // Draw the linear predictor line
       const line = d3.line<{ x: number; y: number }>()
         .x(d => xScale(d.x))
         .y(d => yScale(d.y));
@@ -78,7 +69,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
         .attr('stroke-width', 3)
         .attr('d', line);
 
-      // Highlight the current point
       svg.append('circle')
         .attr('cx', xScale(x1Value))
         .attr('cy', yScale(componentBreakdown.total))
@@ -87,7 +77,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
         .attr('stroke', '#fff')
         .attr('stroke-width', 2);
 
-      // Draw vertical line from x-axis to point
       svg.append('line')
         .attr('x1', xScale(x1Value))
         .attr('y1', yScale(0))
@@ -98,7 +87,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
         .attr('stroke-dasharray', '4,4')
         .attr('opacity', 0.6);
 
-      // Add axes
       const xAxis = d3.axisBottom(xScale);
       const yAxis = d3.axisLeft(yScale);
 
@@ -110,7 +98,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
         .attr('transform', `translate(${margin.left},0)`)
         .call(yAxis);
 
-      // Add zero line
       if (yMin <= 0 && yMax >= 0) {
         svg.append('line')
           .attr('x1', xScale(-5))
@@ -123,7 +110,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
           .attr('opacity', 0.5);
       }
 
-      // Add axis labels
       svg.append('text')
         .attr('transform', `translate(${width / 2}, ${height - 5})`)
         .style('text-anchor', 'middle')
@@ -165,11 +151,9 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
   return (
     <div className="w-full border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Left side: Controls */}
         <div className="space-y-4">
           <h3 className="text-md font-semibold text-gray-800 mb-3">Coefficients (β)</h3>
           
-          {/* Intercept */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               β₀ (Intercept): {beta0.toFixed(2)}
@@ -185,7 +169,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
             />
           </div>
 
-          {/* Slope for x1 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               β₁ (Slope for x₁): {beta1.toFixed(2)}
@@ -201,7 +184,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
             />
           </div>
 
-          {/* Slope for x2 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               β₂ (Slope for x₂): {beta2.toFixed(2)}
@@ -221,7 +203,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
 
           <h3 className="text-md font-semibold text-gray-800 mb-3">Predictor Values</h3>
 
-          {/* x1 value */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               x₁: {x1Value.toFixed(2)}
@@ -237,7 +218,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
             />
           </div>
 
-          {/* x2 value */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               x₂ (fixed): {x2Value.toFixed(2)}
@@ -253,7 +233,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
             />
           </div>
 
-          {/* Component breakdown */}
           <div className="mt-4 p-4 bg-gray-50 rounded-lg">
             <h4 className="text-sm font-semibold text-gray-800 mb-2">At Current Point:</h4>
             <div className="space-y-1 text-sm">
@@ -278,7 +257,6 @@ export const LinearPredictorPlot = React.memo(({ width = 600, height = 300 }: Li
           </div>
         </div>
 
-        {/* Right side: Plot */}
         <div>
           <h3 className="text-md font-semibold text-gray-800 mb-3">Linear Predictor Function</h3>
           <p className="text-sm text-gray-600 mb-3">

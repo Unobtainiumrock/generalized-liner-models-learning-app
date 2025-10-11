@@ -15,7 +15,6 @@ export const LinearSpacePlot = React.memo(({ width = 600, height = 300 }: Linear
   const { truthParams, estimatedParams, mode } = useAppStore();
   const { calculateLinearPredictor } = useGLM();
 
-  // Memoize expensive calculations
   const xValues = useMemo(() => d3.range(-5, 5.1, 0.1), []);
   const truthYValues = useMemo(() => 
     xValues.map(x => calculateLinearPredictor(x, truthParams)), 
@@ -44,12 +43,10 @@ export const LinearSpacePlot = React.memo(({ width = 600, height = 300 }: Linear
         .domain([-10, 10])
         .range([height - margin.bottom, margin.top]);
 
-      // Create line generator
       const line = d3.line<number>()
         .x((_, i) => xScale(-5 + (i * 10 / 100)))
         .y((d) => yScale(d));
 
-      // Truth line (orange)
       svg.append('path')
         .datum(truthYValues)
         .attr('fill', 'none')
@@ -59,7 +56,6 @@ export const LinearSpacePlot = React.memo(({ width = 600, height = 300 }: Linear
         .attr('d', line)
         .attr('aria-label', 'Truth model line');
 
-      // Estimated line (blue) - only show in estimation mode
       if (mode === 'estimation' && estimatedYValues.length > 0) {
         svg.append('path')
           .datum(estimatedYValues)
@@ -71,7 +67,6 @@ export const LinearSpacePlot = React.memo(({ width = 600, height = 300 }: Linear
           .attr('aria-label', 'Estimated model line');
       }
 
-      // Add axes
       const xAxis = d3.axisBottom(xScale);
       const yAxis = d3.axisLeft(yScale);
 
@@ -85,7 +80,6 @@ export const LinearSpacePlot = React.memo(({ width = 600, height = 300 }: Linear
         .call(yAxis)
         .attr('aria-label', 'Y-axis');
 
-      // Add axis labels
       svg.append('text')
         .attr('transform', `translate(${width / 2}, ${height - 5})`)
         .style('text-anchor', 'middle')

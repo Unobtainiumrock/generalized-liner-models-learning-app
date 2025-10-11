@@ -69,7 +69,6 @@ const LINK_FUNCTIONS: Record<LinkFunctionType, LinkFunctionInfo> = {
   }
 };
 
-// Link function implementations
 const identityLink = (mu: number): number => mu;
 
 const logLink = (mu: number): number => {
@@ -84,7 +83,6 @@ const logitLink = (mu: number): number => {
 
 const probitLink = (mu: number): number => {
   if (mu <= 0 || mu >= 1) return NaN;
-  // Approximate inverse normal CDF
   return inverseNormalCDF(mu);
 };
 
@@ -103,9 +101,7 @@ const inverseSquaredLink = (mu: number): number => {
   return 1 / (mu * mu);
 };
 
-// Helper: Approximate inverse normal CDF (probit)
 const inverseNormalCDF = (p: number): number => {
-  // Beasley-Springer-Moro algorithm approximation
   const a = [2.50662823884, -18.61500062529, 41.39119773534, -25.44106049637];
   const b = [-8.47351093090, 23.08336743743, -21.06224101826, 3.13082909833];
   const c = [0.3374754822726147, 0.9761690190917186, 0.1607979714918209,
@@ -190,7 +186,6 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
         .domain([yExtent[0] - yPadding, yExtent[1] + yPadding])
         .range([height - margin.bottom, margin.top]);
 
-      // Draw the link function curve
       const line = d3.line<{ x: number; y: number }>()
         .x(d => xScale(d.x))
         .y(d => yScale(d.y))
@@ -203,9 +198,7 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
         .attr('stroke-width', 3)
         .attr('d', line);
 
-      // Highlight current point if valid
       if (!isNaN(currentEtaValue) && isFinite(currentEtaValue)) {
-        // Vertical line from mu to curve
         svg.append('line')
           .attr('x1', xScale(muValue))
           .attr('y1', yScale(0))
@@ -216,7 +209,6 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
           .attr('stroke-dasharray', '4,4')
           .attr('opacity', 0.6);
 
-        // Horizontal line from curve to y-axis
         svg.append('line')
           .attr('x1', margin.left)
           .attr('y1', yScale(currentEtaValue))
@@ -227,7 +219,6 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
           .attr('stroke-dasharray', '4,4')
           .attr('opacity', 0.6);
 
-        // Point on curve
         svg.append('circle')
           .attr('cx', xScale(muValue))
           .attr('cy', yScale(currentEtaValue))
@@ -237,7 +228,6 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
           .attr('stroke-width', 2);
       }
 
-      // Add axes
       const xAxis = d3.axisBottom(xScale);
       const yAxis = d3.axisLeft(yScale);
 
@@ -249,7 +239,6 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
         .attr('transform', `translate(${margin.left},0)`)
         .call(yAxis);
 
-      // Add zero lines
       if (yExtent[0] <= 0 && yExtent[1] >= 0) {
         svg.append('line')
           .attr('x1', xScale(linkInfo.domain[0]))
@@ -261,7 +250,6 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
           .attr('opacity', 0.3);
       }
 
-      // Add axis labels
       svg.append('text')
         .attr('transform', `translate(${width / 2}, ${height - 10})`)
         .style('text-anchor', 'middle')
@@ -292,7 +280,6 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
   }, [createPlot]);
 
   useEffect(() => {
-    // Reset mu value to mid-range when link function changes
     const linkInfo = LINK_FUNCTIONS[selectedLink];
     const midPoint = (linkInfo.domain[0] + linkInfo.domain[1]) / 2;
     setMuValue(midPoint);
@@ -313,7 +300,6 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
 
   return (
     <div className="w-full border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-      {/* Link function selector */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Select Link Function
@@ -331,7 +317,6 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
         </select>
       </div>
 
-      {/* Information panel */}
       <div className="mb-4 p-3 bg-green-50 rounded-lg">
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div>
@@ -348,7 +333,6 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
         </div>
       </div>
 
-      {/* Mu value slider */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1">
           μ value: {muValue.toFixed(3)}
@@ -374,7 +358,6 @@ export const LinkFunctionPlot = React.memo(({ width = 600, height = 300 }: LinkF
         </div>
       </div>
 
-      {/* Plot */}
       <div className="flex justify-center">
         <svg
           ref={svgRef}

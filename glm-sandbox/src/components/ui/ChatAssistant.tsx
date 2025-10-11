@@ -21,7 +21,6 @@ export const ChatAssistant = () => {
     setInputMessage('');
 
     try {
-      // Call the actual API
       const response = await fetch(config.api.chatUrl, {
         method: 'POST',
         headers: {
@@ -31,9 +30,9 @@ export const ChatAssistant = () => {
           message: inputMessage,
           history: chatHistory,
           context: {
-            currentMode: 'truth', // You'd get this from store
-            distribution: 'normal', // You'd get this from store
-            linkFunction: 'identity', // You'd get this from store
+            currentMode: 'truth',
+            distribution: 'normal',
+            linkFunction: 'identity',
           }
         }),
       });
@@ -71,7 +70,6 @@ export const ChatAssistant = () => {
 
   return (
     <>
-      {/* Floating Action Button */}
       {!isChatOpen && (
         <button
           onClick={() => setChatOpen(true)}
@@ -81,10 +79,8 @@ export const ChatAssistant = () => {
         </button>
       )}
 
-      {/* Chat Panel */}
       {isChatOpen && (
         <div className="fixed bottom-6 right-6 w-80 h-96 bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col z-50">
-          {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <h3 className="font-semibold text-gray-900">GLM Assistant</h3>
             <button
@@ -95,7 +91,6 @@ export const ChatAssistant = () => {
             </button>
           </div>
 
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {chatHistory.length === 0 ? (
               <div className="text-center text-gray-500 text-sm">
@@ -122,7 +117,6 @@ export const ChatAssistant = () => {
             )}
           </div>
 
-          {/* Input */}
           <div className="p-4 border-t border-gray-200">
             <div className="flex space-x-2">
               <input

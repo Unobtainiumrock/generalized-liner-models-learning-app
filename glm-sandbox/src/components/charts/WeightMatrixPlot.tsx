@@ -50,10 +50,9 @@ const WEIGHT_FORMULAS: Record<DistributionType, WeightInfo> = {
 
 export const WeightMatrixPlot = React.memo((_props: WeightMatrixPlotProps) => {
   const [selectedDist, setSelectedDist] = useState<DistributionType>('binomial');
-  const [n] = useState<number>(5); // number of observations
+  const [n] = useState<number>(5);
   const [showComparison, setShowComparison] = useState<boolean>(false);
 
-  // Generate example μ values
   const muValues = useMemo(() => {
     switch (selectedDist) {
       case 'normal':
@@ -67,7 +66,6 @@ export const WeightMatrixPlot = React.memo((_props: WeightMatrixPlotProps) => {
     }
   }, [selectedDist]);
 
-  // Calculate weights based on distribution
   const weights = useMemo(() => {
     switch (selectedDist) {
       case 'normal':
@@ -87,7 +85,6 @@ export const WeightMatrixPlot = React.memo((_props: WeightMatrixPlotProps) => {
     <div className="w-full border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Weight Matrices & IRLS</h3>
 
-      {/* Distribution selector */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Select Distribution
@@ -105,7 +102,6 @@ export const WeightMatrixPlot = React.memo((_props: WeightMatrixPlotProps) => {
         </select>
       </div>
 
-      {/* IRLS Formula */}
       <div className="mb-6 p-4 bg-purple-50 rounded-lg border border-purple-200">
         <h4 className="text-sm font-semibold text-gray-800 mb-2">IRLS Update Equation</h4>
         <div className="text-center">
@@ -116,7 +112,6 @@ export const WeightMatrixPlot = React.memo((_props: WeightMatrixPlotProps) => {
         </p>
       </div>
 
-      {/* Weight Formula for Selected Distribution */}
       <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -142,7 +137,6 @@ export const WeightMatrixPlot = React.memo((_props: WeightMatrixPlotProps) => {
         </div>
       </div>
 
-      {/* Weight Matrix Visualization */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
           <h4 className="text-sm font-semibold text-gray-800">
@@ -158,7 +152,6 @@ export const WeightMatrixPlot = React.memo((_props: WeightMatrixPlotProps) => {
 
         <div className="overflow-x-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Current Distribution Weights */}
             <div>
               <p className="text-xs text-gray-600 mb-2 text-center">{info.name} Distribution</p>
               <table className="min-w-full border-collapse">
@@ -186,7 +179,6 @@ export const WeightMatrixPlot = React.memo((_props: WeightMatrixPlotProps) => {
                 </tbody>
               </table>
 
-              {/* Visual representation of diagonal matrix */}
               <div className="mt-4 p-3 bg-gray-50 rounded-lg">
                 <p className="text-xs text-gray-600 mb-2 text-center">Diagonal Matrix Form:</p>
                 <div className="flex justify-center">
@@ -210,7 +202,6 @@ export const WeightMatrixPlot = React.memo((_props: WeightMatrixPlotProps) => {
               </div>
             </div>
 
-            {/* Normal Distribution Comparison */}
             {showComparison && (
               <div>
                 <p className="text-xs text-gray-600 mb-2 text-center">Normal (Reference)</p>
@@ -266,7 +257,6 @@ export const WeightMatrixPlot = React.memo((_props: WeightMatrixPlotProps) => {
         </div>
       </div>
 
-      {/* Weight Statistics */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
         <h4 className="text-sm font-semibold text-gray-800 mb-3">Weight Statistics</h4>
         <div className="grid grid-cols-3 gap-4 text-center">
@@ -291,7 +281,6 @@ export const WeightMatrixPlot = React.memo((_props: WeightMatrixPlotProps) => {
         </div>
       </div>
 
-      {/* Key Insights */}
       <div className="space-y-3">
         {selectedDist === 'normal' && (
           <div className="p-4 bg-green-100 rounded-lg border-l-4 border-green-500">

@@ -18,7 +18,6 @@ export const MainLayout = () => {
 
   return (
     <div className="flex h-screen">
-      {/* Error Banner */}
       {error && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-red-50 border-b border-red-200 px-4 py-3">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
@@ -40,9 +39,7 @@ export const MainLayout = () => {
         </div>
       )}
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
         <header className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -61,7 +58,6 @@ export const MainLayout = () => {
           </div>
         </header>
 
-        {/* Main area: Blog above the visualization, centered with spacing and scroll when needed */}
         <main className="flex-1 p-6 overflow-auto">
           <div className="max-w-4xl mx-auto">
             <Blog>
@@ -214,7 +210,6 @@ export const MainLayout = () => {
                 <DistributionVisualizer />
               </div>
 
-              {/* Section 4: The Systematic Component */}
               <Paragraph as="h2" className="font-semibold text-2xl text-gray-900 mb-3 mt-8">
                 4. The Systematic Component (<InlineMath math="\eta" /> or <InlineMath math="S" />)
               </Paragraph>
@@ -239,7 +234,6 @@ export const MainLayout = () => {
                 <LinearPredictorPlot />
               </div>
 
-              {/* Section 5: The Link Function */}
               <Paragraph as="h2" className="font-semibold text-2xl text-gray-900 mb-3 mt-8">
                 5. The Link Function (<InlineMath math="\mathcal{L}" />)
               </Paragraph>
@@ -266,7 +260,6 @@ export const MainLayout = () => {
                 <LinkFunctionPlot />
               </div>
 
-              {/* Section 6: Designing Link Functions */}
               <Paragraph as="h2" className="font-semibold text-2xl text-gray-900 mb-3 mt-8">
                 6. A 3-Step Process for Designing a Link Function
               </Paragraph>
@@ -406,7 +399,6 @@ export const MainLayout = () => {
                 <DomainTransformationPlot />
               </div>
 
-              {/* Section 7: Exponential Family & Natural Parameter */}
               <Paragraph as="h2" className="font-semibold text-2xl text-gray-900 mb-3 mt-8">
                 7. Exponential Family Form and the Natural Parameter
               </Paragraph>
@@ -502,7 +494,6 @@ export const MainLayout = () => {
                 <ExponentialFamilyPlot />
               </div>
 
-              {/* Section 8: Reconciling Perspectives */}
               <Paragraph as="h2" className="font-semibold text-2xl text-gray-900 mb-3 mt-8">
                 8. Reconciling the Two Perspectives
               </Paragraph>
@@ -583,7 +574,6 @@ export const MainLayout = () => {
                 <GLMTableInteractive />
               </div>
 
-              {/* Section 9: Matrix Formulation */}
               <Paragraph as="h2" className="font-semibold text-2xl text-gray-900 mb-3 mt-8">
                 9. Transition to Matrix Formulation
               </Paragraph>
@@ -694,7 +684,6 @@ export const MainLayout = () => {
                 <MatrixVisualization />
               </div>
 
-              {/* Section 10: Weight Matrices */}
               <Paragraph as="h2" className="font-semibold text-2xl text-gray-900 mb-3 mt-8">
                 10. The Hidden Identity: Weight Matrices Across Distributions
               </Paragraph>
@@ -800,7 +789,6 @@ export const MainLayout = () => {
         </main>
       </div>
 
-      {/* Chat Assistant */}
       <ChatAssistant />
     </div>
   );

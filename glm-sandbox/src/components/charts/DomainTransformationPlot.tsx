@@ -100,7 +100,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
   const example = TRANSFORMATION_EXAMPLES[selectedExample];
   const numSteps = example.steps.length;
 
-  // Reset mu value when example changes
   useEffect(() => {
     const firstStep = example.steps[0];
     const midPoint = (firstStep.domain[0] + firstStep.domain[1]) / 2;
@@ -119,7 +118,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
       const step = example.steps[stepIndex];
       const margin = { top: 20, right: 20, bottom: 40, left: 60 };
 
-      // Generate plot data
       const [min, max] = step.domain;
       const plotData: { x: number; y: number }[] = [];
       const numPoints = 200;
@@ -134,7 +132,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
 
       if (plotData.length === 0) return;
 
-      // Set up scales
       const xScale = d3.scaleLinear()
         .domain(step.domain)
         .range([margin.left, width - margin.right]);
@@ -147,7 +144,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
         .domain([yExtent[0] - yPadding, yExtent[1] + yPadding])
         .range([height - margin.bottom, margin.top]);
 
-      // Draw transformation curve
       const line = d3.line<{ x: number; y: number }>()
         .x(d => xScale(d.x))
         .y(d => yScale(d.y));
@@ -159,10 +155,8 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
         .attr('stroke-width', 2.5)
         .attr('d', line);
 
-      // Highlight current point
       const yValue = step.func(muValue);
       if (!isNaN(yValue) && isFinite(yValue) && muValue >= min && muValue <= max) {
-        // Vertical line
         svg.append('line')
           .attr('x1', xScale(muValue))
           .attr('y1', yScale(Math.min(...yValues)))
@@ -173,7 +167,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
           .attr('stroke-dasharray', '3,3')
           .attr('opacity', 0.6);
 
-        // Horizontal line
         svg.append('line')
           .attr('x1', margin.left)
           .attr('y1', yScale(yValue))
@@ -184,7 +177,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
           .attr('stroke-dasharray', '3,3')
           .attr('opacity', 0.6);
 
-        // Point
         svg.append('circle')
           .attr('cx', xScale(muValue))
           .attr('cy', yScale(yValue))
@@ -194,7 +186,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
           .attr('stroke-width', 1.5);
       }
 
-      // Add axes
       const xAxis = d3.axisBottom(xScale).ticks(5);
       const yAxis = d3.axisLeft(yScale).ticks(5);
 
@@ -208,7 +199,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
         .call(yAxis)
         .style('font-size', '10px');
 
-      // Add axis labels
       svg.append('text')
         .attr('transform', `translate(${width / 2}, ${height - 5})`)
         .style('text-anchor', 'middle')
@@ -223,7 +213,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
         .style('font-size', '11px')
         .text(step.label);
 
-      // Add zero line if applicable
       if (yExtent[0] <= 0 && yExtent[1] >= 0) {
         svg.append('line')
           .attr('x1', xScale(min))
@@ -261,7 +250,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
     );
   }
 
-  // Calculate output values for each step
   const outputValues = useMemo(() => {
     return example.steps.map(step => {
       const val = step.func(muValue);
@@ -271,7 +259,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
 
   return (
     <div className="w-full border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-      {/* Example selector */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Select Transformation Example
@@ -289,7 +276,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
         </select>
       </div>
 
-      {/* μ value slider */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-1">
           μ value: {muValue.toFixed(3)}
@@ -305,7 +291,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
         />
       </div>
 
-      {/* Transformation steps */}
       <div className={`grid grid-cols-1 md:grid-cols-${numSteps} gap-4`}>
         {example.steps.map((step, idx) => (
           <div key={idx} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
@@ -330,7 +315,6 @@ export const DomainTransformationPlot = React.memo(({ width = 600, height = 250 
         ))}
       </div>
 
-      {/* Transformation flow arrow */}
       {numSteps > 1 && (
         <div className="mt-4 flex items-center justify-center text-sm text-gray-500">
           <span className="font-mono">{example.initialDomain}</span>

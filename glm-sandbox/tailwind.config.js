@@ -1,8 +1,3 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -19,8 +14,8 @@ export default {
           800: '#1e40af',
           900: '#1e3a8a',
         },
-        truth: '#f97316', // orange-500
-        estimated: '#3b82f6', // blue-500
+        truth: '#f97316',
+        estimated: '#3b82f6',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

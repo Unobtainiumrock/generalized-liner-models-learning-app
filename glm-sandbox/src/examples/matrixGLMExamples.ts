@@ -1,26 +1,12 @@
-/**
- * Matrix GLM Examples
- * 
- * This file demonstrates how to generalize from the scalar form
- * η = x^T * β = θ to higher dimensional matrix forms.
- * 
- * Key Concepts:
- * 1. Scalar form: η = β₀ + β₁x₁ (single predictor)
- * 2. Matrix form: η = X * β (multiple predictors, multiple observations)
- * 3. Design matrix X includes intercept column
- * 4. Parameter estimation using matrix operations
- */
 
 import { matrixGLMCalculations } from '../lib/glm';
 import { MatrixGLMParameters, MatrixGLMConfig, MatrixDataPoint } from '../types';
 
-// Example 1: Simple Linear Regression (2 predictors)
 export function example1_LinearRegression() {
   console.log("=== Example 1: Linear Regression with 2 Predictors ===");
   
-  // True parameters: β = [β₀, β₁, β₂] = [2, 1.5, -0.8]
   const trueParams: MatrixGLMParameters = {
-    beta: [2, 1.5, -0.8] // [intercept, slope1, slope2]
+    beta: [2, 1.5, -0.8]
   };
   
   const config: MatrixGLMConfig = {
@@ -29,20 +15,16 @@ export function example1_LinearRegression() {
     numPredictors: 2
   };
   
-  // Generate data
   const data = matrixGLMCalculations.generateData(trueParams, config, 100);
   
-  // Estimate parameters
   const estimatedParams = matrixGLMCalculations.estimateParameters(data, config);
   
   console.log("True parameters:", trueParams.beta);
   console.log("Estimated parameters:", estimatedParams.beta);
   
-  // Demonstrate matrix operations
   const designMatrix = matrixGLMCalculations.createDesignMatrix(data.slice(0, 3));
   console.log("Design matrix (first 3 rows):", designMatrix);
   
-  // Calculate linear predictors for first few observations
   const linearPredictors = data.slice(0, 3).map(point => 
     matrixGLMCalculations.linearPredictor(point.x, trueParams)
   );
@@ -51,13 +33,11 @@ export function example1_LinearRegression() {
   return { trueParams, estimatedParams, data, designMatrix };
 }
 
-// Example 2: Logistic Regression (3 predictors)
 export function example2_LogisticRegression() {
   console.log("\n=== Example 2: Logistic Regression with 3 Predictors ===");
   
-  // True parameters: β = [β₀, β₁, β₂, β₃] = [-1, 2, -1.5, 0.5]
   const trueParams: MatrixGLMParameters = {
-    beta: [-1, 2, -1.5, 0.5] // [intercept, slope1, slope2, slope3]
+    beta: [-1, 2, -1.5, 0.5]
   };
   
   const config: MatrixGLMConfig = {
@@ -66,16 +46,13 @@ export function example2_LogisticRegression() {
     numPredictors: 3
   };
   
-  // Generate data
   const data = matrixGLMCalculations.generateData(trueParams, config, 200);
   
-  // Estimate parameters (simplified - in practice use IRLS)
   const estimatedParams = matrixGLMCalculations.estimateParameters(data, config);
   
   console.log("True parameters:", trueParams.beta);
   console.log("Estimated parameters:", estimatedParams.beta);
   
-  // Show probability calculations
   const probabilities = data.slice(0, 5).map(point => 
     matrixGLMCalculations.meanResponse(point.x, trueParams, config)
   );
@@ -84,13 +61,11 @@ export function example2_LogisticRegression() {
   return { trueParams, estimatedParams, data, probabilities };
 }
 
-// Example 3: Poisson Regression (2 predictors)
 export function example3_PoissonRegression() {
   console.log("\n=== Example 3: Poisson Regression with 2 Predictors ===");
   
-  // True parameters: β = [β₀, β₁, β₂] = [1, 0.5, -0.3]
   const trueParams: MatrixGLMParameters = {
-    beta: [1, 0.5, -0.3] // [intercept, slope1, slope2]
+    beta: [1, 0.5, -0.3]
   };
   
   const config: MatrixGLMConfig = {
@@ -99,16 +74,13 @@ export function example3_PoissonRegression() {
     numPredictors: 2
   };
   
-  // Generate data
   const data = matrixGLMCalculations.generateData(trueParams, config, 150);
   
-  // Estimate parameters
   const estimatedParams = matrixGLMCalculations.estimateParameters(data, config);
   
   console.log("True parameters:", trueParams.beta);
   console.log("Estimated parameters:", estimatedParams.beta);
   
-  // Show rate calculations
   const rates = data.slice(0, 5).map(point => 
     matrixGLMCalculations.meanResponse(point.x, trueParams, config)
   );
@@ -117,35 +89,29 @@ export function example3_PoissonRegression() {
   return { trueParams, estimatedParams, data, rates };
 }
 
-// Example 4: Matrix Operations Demonstration
 export function example4_MatrixOperations() {
   console.log("\n=== Example 4: Matrix Operations Demonstration ===");
   
-  // Create sample data
   const sampleData: MatrixDataPoint[] = [
     { x: [1, 2], y: 5 },
     { x: [2, 3], y: 7 },
     { x: [3, 1], y: 6 }
   ];
   
-  // Create design matrix
   const X = matrixGLMCalculations.createDesignMatrix(sampleData);
   console.log("Design matrix X:");
   console.log(X);
   
-  // Transpose the design matrix
   const Xt = matrixGLMCalculations.matrixTranspose(X);
   console.log("\nTransposed matrix X^T:");
   console.log(Xt);
   
-  // Matrix-vector multiplication
-  const beta = [2, 1.5, -0.8]; // [β₀, β₁, β₂]
+  const beta = [2, 1.5, -0.8];
   const eta = matrixGLMCalculations.matrixMultiply(X, beta);
   console.log("\nLinear predictors η = X * β:");
   console.log("β =", beta);
   console.log("η =", eta);
   
-  // Verify with individual calculations
   console.log("\nVerification (individual calculations):");
   sampleData.forEach((point, i) => {
     const eta_i = matrixGLMCalculations.linearPredictor(point.x, { beta });
@@ -155,17 +121,14 @@ export function example4_MatrixOperations() {
   return { X, Xt, eta, beta };
 }
 
-// Example 5: Comparison with Scalar Form
 export function example5_ScalarVsMatrixComparison() {
   console.log("\n=== Example 5: Scalar vs Matrix Form Comparison ===");
   
-  // Scalar form: η = β₀ + β₁x₁ (single predictor)
-  const scalarParams = { beta: [2, 1.5] }; // [β₀, β₁]
+  const scalarParams = { beta: [2, 1.5] };
   const x_scalar = 3;
   
-  // Matrix form: η = x^T * β (same calculation, different representation)
-  const matrixParams = { beta: [2, 1.5] }; // [β₀, β₁]
-  const x_matrix = [3]; // Single predictor as array
+  const matrixParams = { beta: [2, 1.5] };
+  const x_matrix = [3];
   
   const eta_scalar = matrixGLMCalculations.linearPredictor(x_matrix, matrixParams);
   const eta_matrix = matrixGLMCalculations.linearPredictor(x_matrix, matrixParams);
@@ -183,7 +146,6 @@ export function example5_ScalarVsMatrixComparison() {
   return { eta_scalar, eta_matrix };
 }
 
-// Run all examples
 export function runAllMatrixExamples() {
   console.log("Matrix GLM Examples - Generalizing from Scalar to Matrix Form");
   console.log("=".repeat(60));
@@ -202,7 +164,6 @@ export function runAllMatrixExamples() {
   return results;
 }
 
-// Mathematical explanation
 export const mathematicalExplanation = `
 MATHEMATICAL RELATIONSHIP: Scalar vs Matrix Form
 

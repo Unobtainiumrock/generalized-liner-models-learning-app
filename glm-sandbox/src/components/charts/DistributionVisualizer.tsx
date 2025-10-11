@@ -79,7 +79,6 @@ const DISTRIBUTIONS: Record<DistributionType, DistributionInfo> = {
   }
 };
 
-// Distribution probability functions
 const normalPDF = (x: number, mu: number, sigma2: number): number => {
   const sigma = Math.sqrt(sigma2);
   return (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
@@ -116,7 +115,6 @@ const betaPDF = (x: number, alpha: number, beta: number): number => {
   return (Math.pow(x, alpha - 1) * Math.pow(1 - x, beta - 1)) / betaFunction(alpha, beta);
 };
 
-// Helper functions
 const factorial = (n: number): number => {
   if (n <= 1) return 1;
   let result = 1;
@@ -133,7 +131,6 @@ const binomialCoefficient = (n: number, k: number): number => {
 };
 
 const gamma = (z: number): number => {
-  // Stirling's approximation for gamma function
   if (z < 0.5) return Math.PI / (Math.sin(Math.PI * z) * gamma(1 - z));
   z -= 1;
   const g = 7;
@@ -160,7 +157,6 @@ export const DistributionVisualizer = React.memo(({ width = 600, height = 300 }:
   const [selectedDist, setSelectedDist] = useState<DistributionType>('normal');
   const [params, setParams] = useState<Record<string, number>>({});
 
-  // Initialize params for selected distribution
   useEffect(() => {
     const distInfo = DISTRIBUTIONS[selectedDist];
     const initialParams: Record<string, number> = {};
@@ -196,7 +192,6 @@ export const DistributionVisualizer = React.memo(({ width = 600, height = 300 }:
         data.push({ x, y });
       }
     } else {
-      // Discrete distributions
       for (let x = Math.floor(min); x <= Math.ceil(max); x++) {
         let y = 0;
         switch (selectedDist) {
@@ -239,7 +234,6 @@ export const DistributionVisualizer = React.memo(({ width = 600, height = 300 }:
         .range([height - margin.bottom, margin.top]);
 
       if (distInfo.type === 'continuous') {
-        // Draw continuous curve
         const line = d3.line<{ x: number; y: number }>()
           .x(d => xScale(d.x))
           .y(d => yScale(d.y))
@@ -252,7 +246,6 @@ export const DistributionVisualizer = React.memo(({ width = 600, height = 300 }:
           .attr('stroke-width', 3)
           .attr('d', line);
 
-        // Fill area under curve
         const area = d3.area<{ x: number; y: number }>()
           .x(d => xScale(d.x))
           .y0(yScale(0))
@@ -265,7 +258,6 @@ export const DistributionVisualizer = React.memo(({ width = 600, height = 300 }:
           .attr('opacity', 0.2)
           .attr('d', area);
       } else {
-        // Draw discrete bars
         const barWidth = (width - margin.left - margin.right) / (plotData.length + 1);
         
         svg.selectAll('.bar')
@@ -281,7 +273,6 @@ export const DistributionVisualizer = React.memo(({ width = 600, height = 300 }:
           .attr('opacity', 0.7);
       }
 
-      // Add axes
       const xAxis = d3.axisBottom(xScale);
       const yAxis = d3.axisLeft(yScale).ticks(5);
 
@@ -293,7 +284,6 @@ export const DistributionVisualizer = React.memo(({ width = 600, height = 300 }:
         .attr('transform', `translate(${margin.left},0)`)
         .call(yAxis);
 
-      // Add axis labels
       svg.append('text')
         .attr('transform', `translate(${width / 2}, ${height - 5})`)
         .style('text-anchor', 'middle')
@@ -334,7 +324,6 @@ export const DistributionVisualizer = React.memo(({ width = 600, height = 300 }:
 
   return (
     <div className="w-full border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-      {/* Distribution selector */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Select Distribution
@@ -352,7 +341,6 @@ export const DistributionVisualizer = React.memo(({ width = 600, height = 300 }:
         </select>
       </div>
 
-      {/* Parameter controls */}
       <div className="mb-4 space-y-3">
         {DISTRIBUTIONS[selectedDist].params.map((param) => (
           <div key={param.name}>
@@ -372,7 +360,6 @@ export const DistributionVisualizer = React.memo(({ width = 600, height = 300 }:
         ))}
       </div>
 
-      {/* Plot */}
       <div className="flex justify-center">
         <svg
           ref={svgRef}
@@ -383,7 +370,6 @@ export const DistributionVisualizer = React.memo(({ width = 600, height = 300 }:
         />
       </div>
 
-      {/* Distribution type indicator */}
       <div className="mt-3 text-center text-sm text-gray-600">
         {DISTRIBUTIONS[selectedDist].type === 'continuous' ? 'Continuous' : 'Discrete'} Distribution
       </div>

@@ -15,7 +15,6 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
   const { truthParams, estimatedParams, dataPoints, mode } = useAppStore();
   const { calculateMeanResponse } = useGLM();
 
-  // Memoize expensive calculations
   const xValues = useMemo(() => d3.range(-5, 5.1, 0.1), []);
   const truthYValues = useMemo(() => 
     xValues.map(x => calculateMeanResponse(x, truthParams)), 
@@ -36,11 +35,10 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
 
       const margin = { top: 20, right: 20, bottom: 40, left: 60 };
 
-      // Dynamic scaling based on data
       const allYValues = [...truthYValues, ...estimatedYValues, ...dataPoints.map(p => p.y)];
       const yMin = Math.min(...allYValues);
       const yMax = Math.max(...allYValues);
-      const yPadding = (yMax - yMin) * 0.1 || 1; // 10% padding or 1 if no variation
+      const yPadding = (yMax - yMin) * 0.1 || 1;
 
       const xScale = d3.scaleLinear()
         .domain([-5, 5])
@@ -50,12 +48,10 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
         .domain([yMin - yPadding, yMax + yPadding])
         .range([height - margin.bottom, margin.top]);
 
-      // Create line generator
       const line = d3.line<number>()
         .x((_, i) => xScale(-5 + (i * 10 / 100)))
         .y((d) => yScale(d));
       
-      // Truth curve (orange)
       svg.append('path')
         .datum(truthYValues)
         .attr('fill', 'none')
@@ -65,7 +61,6 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
         .attr('d', line)
         .attr('aria-label', 'Truth model curve');
 
-      // Estimated curve (blue) - only show in estimation mode
       if (mode === 'estimation' && estimatedYValues.length > 0) {
         svg.append('path')
           .datum(estimatedYValues)
@@ -77,10 +72,9 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
           .attr('aria-label', 'Estimated model curve');
       }
 
-      // Add data points with performance optimization for large datasets
       if (dataPoints.length > 0) {
-        const pointRadius = dataPoints.length > 1000 ? 2 : 3; // Smaller points for large datasets
-        const pointOpacity = dataPoints.length > 1000 ? 0.4 : 0.6; // Lower opacity for large datasets
+        const pointRadius = dataPoints.length > 1000 ? 2 : 3;
+        const pointOpacity = dataPoints.length > 1000 ? 0.4 : 0.6;
         
         svg.selectAll('.data-point')
           .data(dataPoints)
@@ -95,7 +89,6 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
           .attr('aria-label', 'Data point');
       }
 
-      // Add axes
       const xAxis = d3.axisBottom(xScale);
       const yAxis = d3.axisLeft(yScale);
 
@@ -109,7 +102,6 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
         .call(yAxis)
         .attr('aria-label', 'Y-axis');
 
-      // Add axis labels with enhanced accessibility
       svg.append('text')
         .attr('transform', `translate(${width / 2}, ${height - 5})`)
         .style('text-anchor', 'middle')
@@ -124,7 +116,6 @@ export const ResponseSpacePlot = React.memo(({ width = 600, height = 300 }: Resp
         .text('Y (Response)')
         .attr('aria-label', 'Y-axis label');
 
-      // Add chart title for screen readers
       svg.append('title')
         .text(`Response Space Plot showing ${dataPoints.length} data points with ${mode === 'estimation' ? 'truth and estimated' : 'truth'} model curves`);
 

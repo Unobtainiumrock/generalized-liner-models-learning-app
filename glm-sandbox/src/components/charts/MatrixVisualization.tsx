@@ -8,18 +8,17 @@ interface MatrixVisualizationProps {
 }
 
 export const MatrixVisualization = React.memo((_props: MatrixVisualizationProps) => {
-  const [n, setN] = useState<number>(4); // number of observations
-  const [p, setP] = useState<number>(2); // number of predictors (excluding intercept)
+  const [n, setN] = useState<number>(4);
+  const [p, setP] = useState<number>(2);
   const [highlightRow, setHighlightRow] = useState<number | null>(null);
   const [showMultiplication, setShowMultiplication] = useState<boolean>(false);
 
-  // Generate example design matrix - regenerate when n or p changes
   const X = useMemo(() => {
     const matrix: number[][] = [];
     for (let i = 0; i < n; i++) {
-      const row = [1]; // intercept
+      const row = [1];
       for (let j = 0; j < p; j++) {
-        row.push(Math.round((Math.random() * 4 - 2) * 10) / 10); // random values between -2 and 2
+        row.push(Math.round((Math.random() * 4 - 2) * 10) / 10);
       }
       matrix.push(row);
     }
@@ -30,7 +29,6 @@ export const MatrixVisualization = React.memo((_props: MatrixVisualizationProps)
     return [...Array(p + 1)].map(() => Math.round(Math.random() * 4 - 2));
   }, [p]);
 
-  // Matrix-vector multiplication: η = Xβ
   const multiplyMatrixVector = (matrix: number[][], vector: number[]): number[] => {
     return matrix.map(row =>
       row.reduce((sum, val, idx) => sum + val * vector[idx], 0)
@@ -43,7 +41,6 @@ export const MatrixVisualization = React.memo((_props: MatrixVisualizationProps)
     <div className="w-full border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Matrix Formulation of GLMs</h3>
 
-      {/* Controls */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
@@ -82,7 +79,6 @@ export const MatrixVisualization = React.memo((_props: MatrixVisualizationProps)
         </button>
       </div>
 
-      {/* Scalar to Matrix Transition */}
       <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
         <h4 className="text-sm font-semibold text-gray-800 mb-3">From Scalar to Matrix Form</h4>
         <div className="space-y-2">
@@ -98,7 +94,6 @@ export const MatrixVisualization = React.memo((_props: MatrixVisualizationProps)
         </div>
       </div>
 
-      {/* Design Matrix Visualization */}
       <div className="mb-6">
         <h4 className="text-sm font-semibold text-gray-800 mb-3">
           Design Matrix <InlineMath math="\mathbf{X}" /> (<InlineMath math={`${n} \\times ${p + 1}`} />)
@@ -211,7 +206,6 @@ export const MatrixVisualization = React.memo((_props: MatrixVisualizationProps)
         )}
       </div>
 
-      {/* Matrix Dimensions */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
         <h4 className="text-sm font-semibold text-gray-800 mb-3">Matrix Dimensions</h4>
         <div className="flex items-center justify-center gap-2 text-sm flex-wrap">
@@ -232,7 +226,6 @@ export const MatrixVisualization = React.memo((_props: MatrixVisualizationProps)
         </div>
       </div>
 
-      {/* Normal Equation Components */}
       <div className="mb-6">
         <h4 className="text-sm font-semibold text-gray-800 mb-3">Normal Equation (OLS Solution)</h4>
         
@@ -288,7 +281,6 @@ export const MatrixVisualization = React.memo((_props: MatrixVisualizationProps)
         </div>
       </div>
 
-      {/* Key Insights */}
       <div className="p-4 bg-blue-100 rounded-lg border-l-4 border-blue-500">
         <p className="text-sm text-gray-800">
           <strong>Key Insight:</strong> The matrix formulation <InlineMath math="\boldsymbol{\eta} = \mathbf{X}\boldsymbol{\beta}" /> 
