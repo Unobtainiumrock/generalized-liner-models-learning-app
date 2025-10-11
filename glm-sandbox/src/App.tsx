@@ -1,5 +1,5 @@
-import { MainLayout } from './components/layout/MainLayout';
-import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import { MainLayout } from '@/components/layout/MainLayout';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 
 function App() {
   return (

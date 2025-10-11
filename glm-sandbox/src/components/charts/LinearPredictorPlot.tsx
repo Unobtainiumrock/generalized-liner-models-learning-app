@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
-import { GLMError } from '../../types';
+import { GLMError } from '@/types';
 
 interface LinearPredictorPlotProps {
   width?: number;

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { glmCalculations } from '../glm'
-import { GLMParameters, GLMConfig } from '../../types'
+import { glmCalculations } from '@/lib/glm'
+import { GLMParameters, GLMConfig } from '@/types'
 
 describe('GLM Calculations', () => {
   describe('linearPredictor', () => {

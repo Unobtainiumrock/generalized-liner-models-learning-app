@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { GLMState, GLMParameters, GLMConfig, DataPoint, ChatMessage, GLMError, ValidationResult } from '../types';
+import { GLMState, GLMParameters, GLMConfig, DataPoint, ChatMessage, GLMError, ValidationResult } from '@/types';
 
 interface AppStore extends GLMState {
   // Error and loading states
