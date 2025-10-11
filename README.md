@@ -87,6 +87,10 @@ Take the testing with a grain of salt, I didn't thoroughly work with that part. 
 - **[Contributing](docs/CONTRIBUTING.md)**: Guidelines for contributors
 - **[Git Workflow](docs/GIT_WORKFLOW.md)**: Git workflow and branching strategy
 
+## Future Directions
+
+While this project provides comprehensive coverage of canonical link functions and their properties, we did not fully integrate the optimization theory perspective that explains why canonical links guarantee unique solutions. The key lies in the Hessian matrix (the matrix of second derivatives of the log-likelihood function): canonical link functions ensure this matrix is negative definite, guaranteeing both invertibility and a unique global maximum. Non-canonical link functions lack this guarantee, potentially leading to non-invertible Hessian matrices or multiple local maxima. Future work could explore this connection in depth, along with practical examples of non-canonical link functions and the computational challenges they introduce. This would provide a complete theoretical foundation connecting the exponential family structure to the optimization landscape.
+
 ## Authors
 
 - Created as a final project for statistical modeling coursework
