@@ -31,6 +31,8 @@ is this okay? I know we have sliders in the frontend and maybe these are just de
 
 13. The Bernoulli distributiin's histogram (at least for the default values) has some bars go outside the edges of the plot.
 
-14. Need to move the sidebar component that containers sliders, repsonsible for the ControlPanel component s.t. it is instead trasposed and underneath the visualization its actually manipulating. ON SECOND THOUGHT JUST REMOVE THAT SHIT. WE ALREADY HAVE SLIDERS FOR THAT DIRECTLY IN THE BLOG.
+14. ✅ COMPLETED - Removed the sidebar ControlPanel component and TwoSpacesVisualization. All controls are now integrated directly in the blog.
 
 15. Inverse Gaussian missing? Maybe add later.
+
+16. ✅ COMPLETED - Fixed the third column (x3) in the matrix visualization to properly display cells when predictors are adjusted.
