@@ -244,3 +244,5 @@ env/
 *.backup
 *.old
 *~
+# Local Netlify folder
+.netlify
