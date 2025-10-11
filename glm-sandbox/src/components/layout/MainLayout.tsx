@@ -92,9 +92,9 @@ export const MainLayout = () => {
               </Paragraph>
 
               <Paragraph className="text-lg text-black leading-relaxed">
-                Generalized Linear Model(GLM) is a model that is used for the exponential family of distributions.
-                But before we actaully get into a GLM, we should first start with a basic model to gain an understanding
-                on Linear Regression.<br />
+                Just as we mentioned about Generalized Linear Model(GLM) is a model that is used for the exponential family of distributions.
+                We should first start with a basic model to gain an understanding on Linear Regression.
+                <br />
               </Paragraph>
 
               <Paragraph className="text-lg text-black leading-relaxed">
