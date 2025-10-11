@@ -34,7 +34,6 @@ This project provides an interactive sandbox for understanding the mathematical 
 ### Installation
 
 ```bash
-cd glm-sandbox
 npm install
 ```
 
@@ -63,7 +62,6 @@ Take the testing with a grain of salt, I didn't thoroughly work with that part. 
 ## Project Structure
 
 ```
-glm-sandbox/
 ├── src/
 │   ├── components/
 │   │   ├── charts/         # Visualization components
@@ -75,8 +73,10 @@ glm-sandbox/
 │   ├── store/              # State management
 │   ├── types/              # TypeScript type definitions
 │   └── examples/           # Example GLM configurations
-└── docs/                   # Documentation
-
+├── api/                    # API endpoints
+├── public/                 # Static assets
+├── docs/                   # Documentation
+└── [config files]          # package.json, vite.config.ts, etc.
 ```
 
 ## Documentation
