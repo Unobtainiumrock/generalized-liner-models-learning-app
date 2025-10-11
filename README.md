@@ -89,7 +89,21 @@ Take the testing with a grain of salt, I didn't thoroughly work with that part. 
 
 ## Future Directions
 
-While this project provides comprehensive coverage of canonical link functions and their properties, we did not fully integrate the optimization theory perspective that explains why canonical links guarantee unique solutions. The key lies in the Hessian matrix (the matrix of second derivatives of the log-likelihood function): canonical link functions ensure this matrix is negative definite, guaranteeing both invertibility and a unique global maximum. Non-canonical link functions lack this guarantee, potentially leading to non-invertible Hessian matrices or multiple local maxima. Future work could explore this connection in depth, along with practical examples of non-canonical link functions and the computational challenges they introduce. This would provide a complete theoretical foundation connecting the exponential family structure to the optimization landscape.
+### Theoretical Extensions
+
+The project currently focuses on canonical link functions, but the world of non-canonical link functions offers a fascinating playground for exploration. While we touched on alternatives like Probit and Complementary log-log, we didn't fully integrate the optimization theory that explains why canonical links guarantee unique solutions. The key lies in the Hessian matrix (the matrix of second derivatives of the log-likelihood function): canonical link functions ensure this matrix is negative definite, guaranteeing both invertibility and a unique global maximum. Non-canonical link functions lack this guarantee, potentially leading to non-invertible Hessian matrices or multiple local maxima. Exploring this connection would provide a complete theoretical foundation linking the exponential family structure to the optimization landscape, revealing the beautiful interplay between probability theory and numerical analysis.
+
+### Practical Development
+
+Several enhancements could improve the application's functionality and educational value:
+
+- **Interactive AI Agent Integration**: Develop context-aware endpoints that provide detailed application documentation through the chat interface, enabling both human users and AI agents to navigate features programmatically. This could leverage protocols like MCP (Model Context Protocol) or A2A (Agent-to-Agent) for agentic browser interactions.
+
+- **Enhanced Visualizations**: Add support for additional distributions (Inverse Gaussian), refine edge cases in existing plots (Bernoulli histogram overflow), and expand matrix equation examples across all GLM configurations.
+
+- **Content Refinement**: Reorganize the matrix formulation narrative to better flow with the IRLS material, add time-step superscripts to the weight matrix tables, and deepen the discussion of variance-link function relationships.
+
+- **Code Quality**: Verify the logical correctness of distribution sampling algorithms (e.g., Knuth's algorithm for Poisson), identify and remove redundant components, and complete API integration with secure environment variable handling.
 
 ## Authors
 
