@@ -1,6 +1,6 @@
 
-import { matrixGLMCalculations } from '../lib/glm';
-import { MatrixGLMParameters, MatrixGLMConfig, MatrixDataPoint } from '../types';
+import { matrixGLMCalculations } from '@/lib/glm';
+import { MatrixGLMParameters, MatrixGLMConfig, MatrixDataPoint } from '@/types';
 
 export function example1_LinearRegression() {
   console.log("=== Example 1: Linear Regression with 2 Predictors ===");

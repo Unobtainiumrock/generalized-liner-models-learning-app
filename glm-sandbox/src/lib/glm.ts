@@ -7,7 +7,7 @@ import {
   MatrixGLMConfig,
   MatrixDataPoint,
   MatrixGLMCalculations
-} from '../types';
+} from '@/types';
 
 const inverseLinkFunctions = {
   log: (x: number) => Math.exp(x),

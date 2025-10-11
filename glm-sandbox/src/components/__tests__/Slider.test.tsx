@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Slider } from '../controls/Slider'
+import { Slider } from '@/components/controls/Slider'
 
 describe('Slider Component', () => {
   it('should render with correct label and value', () => {

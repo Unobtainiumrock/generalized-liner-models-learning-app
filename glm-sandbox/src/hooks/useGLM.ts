@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { useAppStore } from '../store/appStore';
-import { glmCalculations } from '../lib/glm';
-import { GLMParameters, GLMConfig } from '../types';
+import { useAppStore } from '@/store/appStore';
+import { glmCalculations } from '@/lib/glm';
+import { GLMParameters, GLMConfig } from '@/types';
 
 export const useGLM = () => {
   const {

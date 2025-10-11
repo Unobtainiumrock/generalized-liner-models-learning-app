@@ -1,5 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { GLMError } from '../../types';
+import { GLMError } from '@/types';
 
 interface Props {
   children: ReactNode;
