@@ -58,6 +58,8 @@ npm run build
 npm run test
 ```
 
+Take the testing with a grain of salt, I didn't thoroughly work with that part. TDD would have slowed us down far too much.
+
 ## Project Structure
 
 ```
@@ -92,6 +94,37 @@ glm-sandbox/
 
 ## References
 
-- Statistical theory based on standard GLM textbooks and resources
-- Implementation follows modern React and TypeScript best practices
+### Core GLM Theory
+- [Generalized Linear Model](https://en.wikipedia.org/wiki/Generalized_linear_model)
+- [Exponential Family](https://en.wikipedia.org/wiki/Exponential_family)
+- [Maximum Likelihood Estimation](https://en.wikipedia.org/wiki/Maximum_likelihood_estimation)
+- [Iteratively Reweighted Least Squares](https://en.wikipedia.org/wiki/Iteratively_reweighted_least_squares)
+
+### Link Functions
+- [Link Function](https://en.wikipedia.org/wiki/Generalized_linear_model#Link_function)
+- [Logit](https://en.wikipedia.org/wiki/Logit)
+- [Probit Model](https://en.wikipedia.org/wiki/Probit_model)
+- [Complementary Log-Log](https://en.wikipedia.org/wiki/Generalized_linear_model#Complementary_log-log_(cloglog))
+
+### Probability Distributions
+- [Normal Distribution](https://en.wikipedia.org/wiki/Normal_distribution)
+- [Binomial Distribution](https://en.wikipedia.org/wiki/Binomial_distribution)
+- [Bernoulli Distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution)
+- [Poisson Distribution](https://en.wikipedia.org/wiki/Poisson_distribution)
+- [Gamma Distribution](https://en.wikipedia.org/wiki/Gamma_distribution)
+- [Exponential Distribution](https://en.wikipedia.org/wiki/Exponential_distribution)
+- [Inverse Gaussian Distribution](https://en.wikipedia.org/wiki/Inverse_Gaussian_distribution)
+- [Beta Distribution](https://en.wikipedia.org/wiki/Beta_distribution)
+
+### Linear Algebra and Matrix Methods
+- [Design Matrix](https://en.wikipedia.org/wiki/Design_matrix)
+- [Gram Matrix](https://en.wikipedia.org/wiki/Gram_matrix)
+- [Ordinary Least Squares](https://en.wikipedia.org/wiki/Ordinary_least_squares)
+- [Linear Predictor Function](https://en.wikipedia.org/wiki/Linear_predictor_function)
+
+### Statistical Concepts
+- [Canonical Link Function](https://en.wikipedia.org/wiki/Generalized_linear_model#Link_function)
+- [Variance Function](https://en.wikipedia.org/wiki/Generalized_linear_model#Variance_function)
+- [Heteroscedasticity](https://en.wikipedia.org/wiki/Heteroscedasticity)
+- [Likelihood Function](https://en.wikipedia.org/wiki/Likelihood_function)
 
