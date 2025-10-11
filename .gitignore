@@ -2,6 +2,8 @@
 # Project-specific files
 # ============================================
 docs/TODO.md
+GLM_Learning_Sandbox_Full_Archive.pdf
+*.pdf
 
 # ============================================
 # Environment Variables
